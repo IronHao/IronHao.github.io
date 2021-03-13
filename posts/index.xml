@@ -6,8 +6,56 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-Hans</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Fri, 12 Mar 2021 20:09:01 +0800</lastBuildDate>
+		<lastBuildDate>Sat, 13 Mar 2021 15:55:59 +0800</lastBuildDate>
 		<atom:link href="https://ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>完善博客的第一步</title>
+			<link>https://ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</link>
+			<pubDate>Sat, 13 Mar 2021 15:55:59 +0800</pubDate>
+			
+			<guid>https://ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</guid>
+			<description>​ 趁着周末，把之前刚刚搭建好的博客完善下~大部分的内容主题已经满足了，剩下的就是部署到github page上了。 目标 部署到github pag</description>
+			<content type="html"><![CDATA[<p>​		趁着周末，把之前刚刚搭建好的博客完善下~大部分的内容主题已经满足了，剩下的就是部署到github page上了。</p>
+<h2 id="目标">目标</h2>
+<ul>
+<li>部署到github page上，实现对外开放</li>
+<li>绑定域名</li>
+<li>使用PicGo来实现快速上传图片至图床</li>
+</ul>
+<h2 id="过程">过程</h2>
+<h4 id="部署">部署</h4>
+<p>​		部署还是比较方便的，网上有很多教程，这里我讲讲我的方法：</p>
+<ol>
+<li>
+<p>在github上创建一个新的仓库，命名为yourname.github.io；</p>
+</li>
+<li>
+<p>鉴于github推出了自己的桌面程序（GitHub Desktop），我们可以直接使用这个程序来绑定仓库。在网页新创一个仓库后，github会提示你如</p>
+<p>下图所示内容，我们选择“Set up in Desktop&quot;,就可以打开程序，然后选择路径为你的博客需要上传的部分。（如我用的hugo，就设置路径为&hellip;/public）</p>
+<p>PS: 绑定时本地文件夹里必须为空</p>
+<p><img src="https://i.loli.net/2021/03/13/pPiUaoxF7eZcfRq.png" alt=""></p>
+</li>
+<li>
+<p>完成，一切正常的话，接下来你就可以输入网址 <a href="http://yourname.github.io/">http://yourname.github.io/</a> 访问你的博客了</p>
+</li>
+</ol>
+<h4 id="绑定域名">绑定域名</h4>
+<p>​		在仓库的setting里，找到关于Github Page的设置，如下图所示</p>
+<p><img src="https://i.loli.net/2021/03/13/XqZUMOgKGtdy2ks.png" alt=""></p>
+<p>​		在Custom domain里，输入你的域名，顺便开启强制HTTPS。</p>
+<p>​		另一方面，在cmd里输入 ping yourname.github.io，找到对应的ip，在域名那边添加两条解析，如下图所示，一条CNAME指向github分给你的域名，另一条A指向对应的ip。</p>
+<p><img src="https://i.loli.net/2021/03/13/YPibhprVyURIMc8.png" alt=""></p>
+<p>​		到这里，域名绑定算是完成了。但是打开网页，发现证书无效，显示网页为“不安全”状态。这怎么能忍，于是我决定配置Cloudflare来使用HTTPS，具体流程官网会提供的，<a href="https://dash.cloudflare.com/sign-up">点我转至Cloudflare官网</a>。</p>
+<p>​		其中最后需要修改下DNS服务器，像万网点击“管理” → “DNS修改”就能找到了。</p>
+<h4 id="picgo绑定">PicGo绑定</h4>
+<p>​		PicGo在Github上搜索后就可以找到对应的项目仓库，进行下载。</p>
+<p>​		我使用的图床是SM.MS，注册后点击右上角“User”→“Dashboard”→“API Token”→“Generate Secret Token”生成需要的密钥，然后复制到picgo对应的位置即可。</p>
+<h2 id="结尾">结尾</h2>
+<p>​		过程有些曲折，不过解决了就好~</p>
+<p>​		参考文章：https://zhuanlan.zhihu.com/p/37752930</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>反反复复的日常</title>

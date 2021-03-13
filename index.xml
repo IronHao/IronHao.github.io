@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 12 Mar 2021 20:09:01 +0800</lastBuildDate><atom:link href="https://ironhao.top/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 13 Mar 2021 15:55:59 +0800</lastBuildDate><atom:link href="https://ironhao.top/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>完善博客的第一步</title>
+      <link>https://ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</link>
+      <pubDate>Sat, 13 Mar 2021 15:55:59 +0800</pubDate>
+      
+      <guid>https://ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</guid>
+      <description>​ 趁着周末，把之前刚刚搭建好的博客完善下~大部分的内容主题已经满足了，剩下的就是部署到github page上了。 目标 部署到github pag</description>
+    </item>
+    
     <item>
       <title>反反复复的日常</title>
       <link>https://ironhao.top/posts/firstday/</link>
