@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>IronHao</title>
-    <link>https://ironhao.github.io/</link>
+    <link>https://www.ironhao.top/</link>
     <description>Recent content on IronHao</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 12 Mar 2021 20:09:01 +0800</lastBuildDate><atom:link href="https://ironhao.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 12 Mar 2021 20:09:01 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>反反复复的日常</title>
-      <link>https://ironhao.github.io/posts/firstday/</link>
+      <link>https://www.ironhao.top/posts/firstday/</link>
       <pubDate>Fri, 12 Mar 2021 20:09:01 +0800</pubDate>
       
-      <guid>https://ironhao.github.io/posts/firstday/</guid>
+      <guid>https://www.ironhao.top/posts/firstday/</guid>
       <description>​ 认认真真的静下心来学习。 ​ 反反复复的玩了不少博客框架，每次都是三分钟热度，搭完之后就闲置在那了。上一个用typecho的博客，搭了快一年，</description>
     </item>
     
