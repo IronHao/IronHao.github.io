@@ -1,0 +1,38 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Posts on IronHao</title>
+		<link>https://ironhao.github.io/posts/</link>
+		<description>Recent content in Posts on IronHao</description>
+		<generator>Hugo -- gohugo.io</generator>
+		<language>zh-Hans</language>
+		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+		<lastBuildDate>Fri, 12 Mar 2021 20:09:01 +0800</lastBuildDate>
+		<atom:link href="https://ironhao.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>反反复复的日常</title>
+			<link>https://ironhao.github.io/posts/firstday/</link>
+			<pubDate>Fri, 12 Mar 2021 20:09:01 +0800</pubDate>
+			
+			<guid>https://ironhao.github.io/posts/firstday/</guid>
+			<description>​ 认认真真的静下心来学习。 ​ 反反复复的玩了不少博客框架，每次都是三分钟热度，搭完之后就闲置在那了。上一个用typecho的博客，搭了快一年，</description>
+			<content type="html"><![CDATA[<p>​	认认真真的静下心来学习。</p>
+<p>​	反反复复的玩了不少博客框架，每次都是三分钟热度，搭完之后就闲置在那了。上一个用typecho的博客，搭了快一年，服务器都要到期了，也没写几篇文章，有点失败。这次打算转github-page来部署博客，不用花多余的钱去买服务器，也不用担心博客消失、转移等一系列麻烦的事情。</p>
+<p>​	在这里稍稍的写一下自己博客的用处吧：</p>
+<ul>
+<li>
+<p>作为一名软工大二的学生，用博客记录下自己平时学习所得，顺带巩固</p>
+</li>
+<li>
+<p>平日里看了不少电影，在博客里写一些观后感</p>
+</li>
+<li>
+<p>记录生活</p>
+<p><img src="https://i.loli.net/2021/03/12/a5jBz9Gmt32QdHp.jpg" alt="VXqlb7r1_橙色云插画.jpg"></p>
+</li>
+</ul>
+]]></content>
+		</item>
+		
+	</channel>
+</rss>
