@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Sat, 13 Mar 2021 15:55:59 +0800</lastBuildDate><atom:link href="https://ironhao.top/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 14 Mar 2021 20:42:34 +0800</lastBuildDate><atom:link href="https://ironhao.top/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>约瑟夫环的两种设计——结构化设计与OOP | 学习记录</title>
+      <link>https://ironhao.top/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Sun, 14 Mar 2021 20:42:34 +0800</pubDate>
+      
+      <guid>https://ironhao.top/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</guid>
+      <description>周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记</description>
+    </item>
+    
     <item>
       <title>完善博客的第一步</title>
       <link>https://ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</link>

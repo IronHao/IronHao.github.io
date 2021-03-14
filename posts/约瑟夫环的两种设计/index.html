@@ -1,24 +1,91 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-	<channel>
-		<title>Posts on IronHao</title>
-		<link>https://ironhao.top/posts/</link>
-		<description>Recent content in Posts on IronHao</description>
-		<generator>Hugo -- gohugo.io</generator>
-		<language>zh-Hans</language>
-		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Sun, 14 Mar 2021 20:42:34 +0800</lastBuildDate>
-		<atom:link href="https://ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
-		
-		<item>
-			<title>约瑟夫环的两种设计——结构化设计与OOP | 学习记录</title>
-			<link>https://ironhao.top/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</link>
-			<pubDate>Sun, 14 Mar 2021 20:42:34 +0800</pubDate>
-			
-			<guid>https://ironhao.top/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</guid>
-			<description>周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记</description>
-			<content type="html"><![CDATA[<p>  周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记录。</p>
-<h2 id="约瑟夫环的实现">约瑟夫环的实现</h2>
-<h4 id="结构化设计">结构化设计</h4>
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="约瑟夫环的两种设计——结构化设计与OOP | 学习记录">
+<meta itemprop="description" content="周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记"><meta itemprop="datePublished" content="2021-03-14T20:42:34&#43;08:00" />
+<meta itemprop="dateModified" content="2021-03-14T20:42:34&#43;08:00" />
+<meta itemprop="wordCount" content="1184">
+<meta itemprop="keywords" content="" /><meta property="og:title" content="约瑟夫环的两种设计——结构化设计与OOP | 学习记录" />
+<meta property="og:description" content="周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ironhao.top/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-14T20:42:34&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-14T20:42:34&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="约瑟夫环的两种设计——结构化设计与OOP | 学习记录"/>
+<meta name="twitter:description" content="周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>约瑟夫环的两种设计——结构化设计与OOP | 学习记录</title>
+	<link rel="stylesheet" href="https://ironhao.top/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	<style type="text/css">@font-face{
+    font-family: 'Noto Sans CJK';
+    font-weight: 200;
+    font-style: normal;
+    font-stretch: normal;
+    font-display: swap;
+    src: url('https://ironhao.top/fonts/NotoSansCJK-Regular-1.otf') format('opentype'),
+         url('https://ironhao.top/fonts/NotoSansCJK-Thin-2.otf') format('opentype'),
+         url('https://ironhao.top/fonts/NotoSansCJK-Light-3.otf') format('opentype'),
+         url('https://ironhao.top/fonts/NotoSansCJK-DemiLight-4.otf') format('opentype'),
+         url('https://ironhao.top/fonts/NotoSansCJK-Medium-5.otf') format('opentype'),
+         url('https://ironhao.top/fonts/NotoSansCJK-Bold-6.otf') format('opentype'),
+         url('https://ironhao.top/fonts/NotoSansCJK-Black-7.otf') format('opentype');
+       
+}</style>
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://ironhao.top/">IronHao</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://ironhao.top/posts/">Posts</a>
+				<a href="https://ironhao.top/about-hugo/">About</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://zjut_yangtiehao@outlook.com" target="_blank" rel="noopener me" title="Email"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a><a href="https://github.com/IronHao" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://ironhao.top/posts/">Posts</a></li>
+			<li><a href="https://ironhao.top/about-hugo/">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Mar 14, 2021</span></div>
+				<h1>约瑟夫环的两种设计——结构化设计与OOP | 学习记录</h1>
+			</header>
+			<div class="content">
+				<p>  周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记录。</p>
+<h2 id="约瑟夫环的实现">约瑟夫环的实现<a href="#约瑟夫环的实现" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h4 id="结构化设计">结构化设计<a href="#结构化设计" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p>  这一块网络上的资料也很多，我这里提供一种方法。总的思路就是使用累加器来记录报数，到指定人数后将对应的人“杀死”，一直循环直至剩下一人，返回存活人的号码。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 </span><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
@@ -72,7 +139,7 @@
     
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div><h4 id="基于面向对象oop">基于面向对象（OOP）</h4>
+</code></pre></div><h4 id="基于面向对象oop">基于面向对象（OOP）<a href="#基于面向对象oop" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p>  根据我目前对OOP的理解，就是将问题分为许多个小问题，再将其封装成类，一个类解决一个问题。在这个约瑟夫环问题中，我分了三类：</p>
 <ul>
 <li>整个约瑟夫环的过程（JosephusProblem）</li>
@@ -240,83 +307,37 @@
         <span class="kt">int</span> <span class="n">index</span><span class="p">;</span>
 <span class="p">};</span>
 
-</code></pre></div><h2 id="一些想法">一些想法</h2>
+</code></pre></div><h2 id="一些想法">一些想法<a href="#一些想法" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>  毕竟是开学初，刚开始系统的学习OOP设计思路，也许上面的类划分不够细致，不过程序跑起来后，感觉还是不错的，代码个人看着也还是比较清晰的。当然基于OOP设计的程序还是有点问题的，使用了指针却没有手动内存释放，会导致内存泄漏等。这些就留待下次有空完成吧~</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>完善博客的第一步</title>
-			<link>https://ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</link>
-			<pubDate>Sat, 13 Mar 2021 15:55:59 +0800</pubDate>
-			
-			<guid>https://ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</guid>
-			<description>​ 趁着周末，把之前刚刚搭建好的博客完善下~大部分的内容主题已经满足了，剩下的就是部署到github page上了。 目标 部署到github pag</description>
-			<content type="html"><![CDATA[<p>​		趁着周末，把之前刚刚搭建好的博客完善下~大部分的内容主题已经满足了，剩下的就是部署到github page上了。</p>
-<h2 id="目标">目标</h2>
-<ul>
-<li>部署到github page上，实现对外开放</li>
-<li>绑定域名</li>
-<li>使用PicGo来实现快速上传图片至图床</li>
-</ul>
-<h2 id="过程">过程</h2>
-<h4 id="部署">部署</h4>
-<p>​		部署还是比较方便的，网上有很多教程，这里我讲讲我的方法：</p>
-<ol>
-<li>
-<p>在github上创建一个新的仓库，命名为yourname.github.io；</p>
-</li>
-<li>
-<p>鉴于github推出了自己的桌面程序（GitHub Desktop），我们可以直接使用这个程序来绑定仓库。在网页新创一个仓库后，github会提示你如</p>
-<p>下图所示内容，我们选择“Set up in Desktop&quot;,就可以打开程序，然后选择路径为你的博客需要上传的部分。（如我用的hugo，就设置路径为&hellip;/public）</p>
-<p>PS: 绑定时本地文件夹里必须为空</p>
-<p><img src="https://i.loli.net/2021/03/13/pPiUaoxF7eZcfRq.png" alt=""></p>
-</li>
-<li>
-<p>完成，一切正常的话，接下来你就可以输入网址 <a href="http://yourname.github.io/">http://yourname.github.io/</a> 访问你的博客了</p>
-</li>
-</ol>
-<h4 id="绑定域名">绑定域名</h4>
-<p>​		在仓库的setting里，找到关于Github Page的设置，如下图所示</p>
-<p><img src="https://i.loli.net/2021/03/13/XqZUMOgKGtdy2ks.png" alt=""></p>
-<p>​		在Custom domain里，输入你的域名，顺便开启强制HTTPS。</p>
-<p>​		另一方面，在cmd里输入 ping yourname.github.io，找到对应的ip，在域名那边添加两条解析，如下图所示，一条CNAME指向github分给你的域名，另一条A指向对应的ip。</p>
-<p><img src="https://i.loli.net/2021/03/13/YPibhprVyURIMc8.png" alt=""></p>
-<p>​		到这里，域名绑定算是完成了。但是打开网页，发现证书无效，显示网页为“不安全”状态。这怎么能忍，于是我决定配置Cloudflare来使用HTTPS，具体流程官网会提供的，<a href="https://dash.cloudflare.com/sign-up">点我转至Cloudflare官网</a>。</p>
-<p>​		其中最后需要修改下DNS服务器，像万网点击“管理” → “DNS修改”就能找到了。</p>
-<h4 id="picgo绑定">PicGo绑定</h4>
-<p>​		PicGo在Github上搜索后就可以找到对应的项目仓库，进行下载。</p>
-<p>​		我使用的图床是SM.MS，注册后点击右上角“User”→“Dashboard”→“API Token”→“Generate Secret Token”生成需要的密钥，然后复制到picgo对应的位置即可。</p>
-<h2 id="结尾">结尾</h2>
-<p>​		过程有些曲折，不过解决了就好~</p>
-<p>​		参考文章：https://zhuanlan.zhihu.com/p/37752930</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>反反复复的日常</title>
-			<link>https://ironhao.top/posts/firstday/</link>
-			<pubDate>Fri, 12 Mar 2021 20:09:01 +0800</pubDate>
-			
-			<guid>https://ironhao.top/posts/firstday/</guid>
-			<description>​ 认认真真的静下心来学习。 ​ 反反复复的玩了不少博客框架，每次都是三分钟热度，搭完之后就闲置在那了。上一个用typecho的博客，搭了快一年，</description>
-			<content type="html"><![CDATA[<p>​	认认真真的静下心来学习。</p>
-<p>​	反反复复的玩了不少博客框架，每次都是三分钟热度，搭完之后就闲置在那了。上一个用typecho的博客，搭了快一年，服务器都要到期了，也没写几篇文章，有点失败。这次打算转github-page来部署博客，不用花多余的钱去买服务器，也不用担心博客消失、转移等一系列麻烦的事情。</p>
-<p>​	在这里稍稍的写一下自己博客的用处吧：</p>
-<ul>
-<li>
-<p>作为一名软工大二的学生，用博客记录下自己平时学习所得，顺带巩固</p>
-</li>
-<li>
-<p>平日里看了不少电影，在博客里写一些观后感</p>
-</li>
-<li>
-<p>记录生活</p>
-<p><img src="https://i.loli.net/2021/03/12/a5jBz9Gmt32QdHp.jpg" alt="VXqlb7r1_橙色云插画.jpg"></p>
-</li>
-</ul>
-]]></content>
-		</item>
-		
-	</channel>
-</rss>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1184 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2021-03-14 20:42 &#43;0800</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>完善博客的第一步</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2021 <a href="https://ironhao.top/">IronHao</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://ironhao.top/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+
+	<script src="https://ironhao.top/js/bundle.min.7d8545daa55d62427355498dd8da13f98ff79a7938ce7d2a5e2ae1ec0de3beb8.js" integrity="sha256-fYVF2qVdYkJzVUmN2NoT+Y/3mnk4zn0qXirh7A3jvrg=" crossorigin="anonymous"></script>
+	
+
+</body>
+
+</html>
