@@ -1,20 +1,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>Posts on IronHao</title>
-		<link>https://ironhao.github.io/posts/</link>
+		<link>https://www.ironhao.top/posts/</link>
 		<description>Recent content in Posts on IronHao</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-cn</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
 		<lastBuildDate>Sun, 14 Mar 2021 20:42:34 +0800</lastBuildDate>
-		<atom:link href="https://ironhao.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		<atom:link href="https://www.ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
 			<title>约瑟夫环的两种设计——结构化设计与OOP | 学习记录</title>
-			<link>https://ironhao.github.io/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</link>
+			<link>https://www.ironhao.top/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</link>
 			<pubDate>Sun, 14 Mar 2021 20:42:34 +0800</pubDate>
 			
-			<guid>https://ironhao.github.io/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</guid>
+			<guid>https://www.ironhao.top/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</guid>
 			<description>周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记</description>
 			<content type="html"><![CDATA[<p>  周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记录。</p>
 <h2 id="约瑟夫环的实现">约瑟夫环的实现</h2>
@@ -247,10 +247,10 @@
 		
 		<item>
 			<title>完善博客的第一步</title>
-			<link>https://ironhao.github.io/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</link>
+			<link>https://www.ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</link>
 			<pubDate>Sat, 13 Mar 2021 15:55:59 +0800</pubDate>
 			
-			<guid>https://ironhao.github.io/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</guid>
+			<guid>https://www.ironhao.top/posts/%E5%AE%8C%E5%96%84%E5%8D%9A%E5%AE%A2/</guid>
 			<description>​ 趁着周末，把之前刚刚搭建好的博客完善下~大部分的内容主题已经满足了，剩下的就是部署到github page上了。 目标 部署到github pag</description>
 			<content type="html"><![CDATA[<p>​		趁着周末，把之前刚刚搭建好的博客完善下~大部分的内容主题已经满足了，剩下的就是部署到github page上了。</p>
 <h2 id="目标">目标</h2>
@@ -295,10 +295,10 @@
 		
 		<item>
 			<title>反反复复的日常</title>
-			<link>https://ironhao.github.io/posts/firstday/</link>
+			<link>https://www.ironhao.top/posts/firstday/</link>
 			<pubDate>Fri, 12 Mar 2021 20:09:01 +0800</pubDate>
 			
-			<guid>https://ironhao.github.io/posts/firstday/</guid>
+			<guid>https://www.ironhao.top/posts/firstday/</guid>
 			<description>​ 认认真真的静下心来学习。 ​ 反反复复的玩了不少博客框架，每次都是三分钟热度，搭完之后就闲置在那了。上一个用typecho的博客，搭了快一年，</description>
 			<content type="html"><![CDATA[<p>​	认认真真的静下心来学习。</p>
 <p>​	反反复复的玩了不少博客框架，每次都是三分钟热度，搭完之后就闲置在那了。上一个用typecho的博客，搭了快一年，服务器都要到期了，也没写几篇文章，有点失败。这次打算转github-page来部署博客，不用花多余的钱去买服务器，也不用担心博客消失、转移等一系列麻烦的事情。</p>
