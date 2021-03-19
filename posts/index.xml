@@ -6,8 +6,227 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-cn</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Sun, 14 Mar 2021 20:42:34 +0800</lastBuildDate>
+		<lastBuildDate>Fri, 19 Mar 2021 17:14:50 +0800</lastBuildDate>
 		<atom:link href="https://www.ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>构造D-Heap并理解其插入删除算法|学习记录</title>
+			<link>https://www.ironhao.top/posts/d-heap/</link>
+			<pubDate>Fri, 19 Mar 2021 17:14:50 +0800</pubDate>
+			
+			<guid>https://www.ironhao.top/posts/d-heap/</guid>
+			<description>这几周在痛苦的学习数据结构，老师给我们布置了一个构造D-Heap的作业，断断续续debug了两天，总算是实现了。这里就记录一下我的思路与过程</description>
+			<content type="html"><![CDATA[<p>  这几周在痛苦的学习数据结构，老师给我们布置了一个构造D-Heap的作业，断断续续debug了两天，总算是实现了。这里就记录一下我的思路与过程。</p>
+<h2 id="什么是d-heap">什么是D-Heap？</h2>
+<blockquote>
+<p>以下为个人目前见解，还在学习中，不一定完全正确。</p>
+</blockquote>
+<p>  首先，它是一个堆（heap）结构，我们常说的堆结构Binary-heap（这里以最小堆为例）应该满足以下两点：</p>
+<ul>
+<li>是一个完全二叉树（这样才能够存储在数组里）</li>
+<li>每个父节点都要小于其子节点（最大堆相反）</li>
+</ul>
+<p>  而D-Heap可以理解为其变式，或者称为泛型，它的每个父节点可以拥有D个子节点。</p>
+<h2 id="构造d-heap">构造D-Heap</h2>
+<p>  Heap是存放在数组中的，通过简单的画格子方法，我们可以找到一个规律（假设我们从下标为0开始存数），<strong>第i位的数恰巧为第i * d 到第（i+1) * d位数的父节点</strong>，这也是我们构造的关键。</p>
+<h4 id="插入">插入</h4>
+<p>  插入的思路如下：</p>
+<ol>
+<li>将插入的数据存放在队尾；</li>
+<li>由队尾的叶子开始，与其父节点进行比较，若父大子小，则进行交换，即选较小值作为父节点（默认为最大堆）;</li>
+<li>重复第2步骤，直至不再需要交换或者遍历到了根节点，表明堆已是有序的了。</li>
+</ol>
+<p>  而由子节点找父节点的方法就用到了我们上面的规律，第（i-1）/d位的节点即使第i位的父节点。</p>
+<p><img src="https://i.loli.net/2021/03/19/hcCtAOoue1RUiND.png" alt=""><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<h4 id="删除">删除</h4>
+<p>  与插入的思路恰好相反，由根节点开始操作：</p>
+<ol>
+<li>保存好第0位的数据（如果你要返回被删除的值话），将最后一位的数据存放至第0位，覆盖掉，再删除掉最后一位；</li>
+<li>从根节点开始，找到其子节点（总共有d个）中的最小值，如果父大子小，则交换他们；</li>
+<li>重复第2步骤，直到交换完最后一层或不再交换。</li>
+</ol>
+<p><img src="https://i.loli.net/2021/03/19/YwinmT2BAuXhN7F.png" alt=""><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></p>
+<h4 id="具体代码实现">具体代码实现</h4>
+<p>  这边d我设置为4（按照题目要求)，可以修改为一个变量d，在初始化的时候确定。同时为了便于代码的阅读，我将交换（swap）和查找子节点最小数（minInOneSubTree）整合为私有方法。另外又设置了min这个结构，里面存有最小值的大小，对应的下标，以及是否存在（exist，主要用来解决只有1个的极端条件）。代码本身肯定还不够精简，还不是最终版本，可以作为参考。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">quadHeap</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">quadHeap</span><span class="p">()</span>
+        <span class="p">{</span>
+             <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">CAPACITY</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+             <span class="p">{</span>
+                 <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+             <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="o">~</span><span class="n">quadHeap</span><span class="p">()</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="n">T</span> <span class="n">element</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">currentSize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">currentIndex</span> <span class="o">=</span> <span class="n">currentSize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kt">bool</span> <span class="n">notOrdered</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">notOrdered</span> <span class="o">&amp;&amp;</span> <span class="n">currentIndex</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">notOrdered</span> <span class="o">=</span> <span class="n">swap</span><span class="p">(</span><span class="n">currentIndex</span><span class="p">);</span>
+                <span class="n">currentIndex</span> <span class="o">=</span> <span class="p">(</span><span class="n">currentIndex</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span><span class="p">;</span>
+            <span class="p">}</span> 
+        <span class="p">}</span>
+            
+
+        <span class="n">T</span> <span class="nf">deleteMin</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">T</span> <span class="n">returnElement</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="n">T</span> <span class="n">lastElement</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">--</span><span class="n">currentSize</span><span class="p">];</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">currentSize</span><span class="p">]</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">returnElement</span><span class="p">;</span>
+            <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">lastElement</span><span class="p">;</span>
+            <span class="n">min</span> <span class="n">minOne</span><span class="p">;</span>
+            <span class="n">minOne</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="n">minOne</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">minOne</span><span class="p">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="n">currentSize</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">minOne</span> <span class="o">=</span> <span class="n">minInOneSubTree</span><span class="p">(</span><span class="n">minOne</span><span class="p">.</span><span class="n">index</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">minOne</span><span class="p">.</span><span class="n">exist</span><span class="p">)</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="n">swap</span><span class="p">(</span><span class="n">minOne</span><span class="p">.</span><span class="n">index</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">returnElement</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">print</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">currentSize</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">struct</span> <span class="nc">min</span>
+        <span class="p">{</span>
+            <span class="n">T</span> <span class="n">data</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">index</span><span class="p">;</span>
+            <span class="kt">bool</span> <span class="n">exist</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> 
+        <span class="p">};</span>
+        
+        <span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">CAPACITY</span> <span class="o">=</span> <span class="mi">61</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">currentSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">T</span> <span class="n">data</span><span class="p">[</span><span class="n">CAPACITY</span><span class="p">];</span>
+
+        <span class="kt">bool</span> <span class="nf">swap</span> <span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            
+
+            <span class="kt">bool</span> <span class="n">isChanged</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">preIndex</span> <span class="o">=</span> <span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span><span class="p">;</span>
+            <span class="n">T</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">preIndex</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">isChanged</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">preIndex</span><span class="p">];</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">preIndex</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">isChanged</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+        <span class="n">min</span> <span class="nf">minInOneSubTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">min</span> <span class="n">minOne</span><span class="p">;</span>
+            <span class="n">minOne</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">index</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">minOne</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">minOne</span><span class="p">.</span><span class="n">data</span> <span class="o">==</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">minOne</span><span class="p">.</span><span class="n">exist</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">minOne</span><span class="p">;</span>
+            <span class="p">}</span>
+           
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">index</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">minOne</span><span class="p">.</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">{</span>
+                    <span class="n">minOne</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="n">minOne</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">minOne</span><span class="p">;</span>
+        <span class="p">}</span>
+
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">quadHeap</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">testHeap</span><span class="p">;</span>
+   
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">14</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Test&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">testHeap</span><span class="p">.</span><span class="n">deleteMin</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">testHeap</span><span class="p">.</span><span class="n">deleteMin</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">testHeap</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">testHeap</span><span class="p">.</span><span class="n">deleteMin</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">testHeap</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">11</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">13</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">testHeap</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="小结">小结</h2>
+<p>  写出来没错就好，也算进步了一点~</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>图片来自Mark A. Weiss - Data Structures and Algorithm Analysis in C++-Pearson (2014) <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>图片来自Mark A. Weiss - Data Structures and Algorithm Analysis in C++-Pearson (2014) <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+		</item>
 		
 		<item>
 			<title>约瑟夫环的两种设计——结构化设计与OOP | 学习记录</title>

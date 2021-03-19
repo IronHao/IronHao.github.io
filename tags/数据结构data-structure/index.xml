@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据结构|Data structure on IronHao</title>
+    <link>https://www.ironhao.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84data-structure/</link>
+    <description>Recent content in 数据结构|Data structure on IronHao</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Fri, 19 Mar 2021 17:14:50 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84data-structure/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>构造D-Heap并理解其插入删除算法|学习记录</title>
+      <link>https://www.ironhao.top/posts/d-heap/</link>
+      <pubDate>Fri, 19 Mar 2021 17:14:50 +0800</pubDate>
+      
+      <guid>https://www.ironhao.top/posts/d-heap/</guid>
+      <description>这几周在痛苦的学习数据结构，老师给我们布置了一个构造D-Heap的作业，断断续续debug了两天，总算是实现了。这里就记录一下我的思路与过程</description>
+    </item>
+    
+  </channel>
+</rss>
