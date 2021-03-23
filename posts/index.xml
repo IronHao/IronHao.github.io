@@ -6,8 +6,71 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-cn</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Fri, 19 Mar 2021 17:14:50 +0800</lastBuildDate>
+		<lastBuildDate>Tue, 23 Mar 2021 18:33:32 +0800</lastBuildDate>
 		<atom:link href="https://www.ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>通过Single/Double Rotation来确保AVL Tree的成立|学习记录</title>
+			<link>https://www.ironhao.top/posts/avl%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC/</link>
+			<pubDate>Tue, 23 Mar 2021 18:33:32 +0800</pubDate>
+			
+			<guid>https://www.ironhao.top/posts/avl%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC/</guid>
+			<description>AVL树拥有O(logN)的查找和删除速度，这也是我们创建这种数据结构的原因，但是，一次删除或者添加操作就可能破坏其脆弱的结构，因此我们需要</description>
+			<content type="html"><![CDATA[<p>  AVL树拥有O(logN)的查找和删除速度，这也是我们创建这种数据结构的原因，但是，一次删除或者添加操作就可能破坏其脆弱的结构，因此我们需要Single/Double Rotation来保证其结构的正确。</p>
+<h2 id="什么是avl树">什么是AVL树</h2>
+<blockquote>
+<p>AVL tree is binary search tree with self balancing ability.</p>
+<p>Its height difference between the right and left subtree of all nodes not greater than one.</p>
+</blockquote>
+<p>  简单来说，就是一个每个叶子的高度差不大于一的二叉搜索树。</p>
+<h2 id="sd-rotation">S/D Rotation</h2>
+<h4 id="为什么需要">为什么需要</h4>
+<p><img src="https://i.loli.net/2021/03/23/UIB7ct5MvCQbRd3.png" alt=""></p>
+<p>  如图所示，一次简单的插入操作后，200右边的高度变成了4，而左边为2，叶子的高度差大于1，直接破坏了AVL树的结构。通过Single/Double Rotation，我们可以恢复其结构。</p>
+<h4 id="使用时机与选择">使用时机与选择</h4>
+<blockquote>
+<p>这边有一个平衡系数用来判断其高度差。</p>
+<p>即 左子树的高度 - 右子树的高度 = 该节点的平衡系数</p>
+</blockquote>
+<p>  简单来说，就是找，找到某个节点，其左右子树高度差大于二，那么此时就需要旋转了。一般来说，会有这么四种情况：</p>
+<ul>
+<li>左边子树的左节点过长（Left – Left Rotation）</li>
+<li>右边子树的右节点过长（Right – Right Rotation）</li>
+<li>右边子树的左节点过长（Right – Left Rotation）</li>
+<li>左边子树的右节点过长（Left – Right Rotation)</li>
+</ul>
+<p>  前两种情况使用Single Rotation即可解决，后两种情况较为复杂，需要使用Double Rotation来解决。</p>
+<h4 id="single-rotation">Single Rotation</h4>
+<p>  上图就是一个R-R Rotation，即右子树的右节点过长。正常来说，我们需要按照以下步骤：</p>
+<p><img src="https://i.loli.net/2021/03/23/WPJlkpsrtBzEdvM.jpg" alt=""></p>
+<ol>
+<li>找到不平衡的点，即其平衡系数绝对值大于1(注意，这个点可能有好多个，应该选择层数最高的那个)</li>
+<li>如图标红的线就是我们要移动的，我们将200绕着400逆时针旋转，把350挤掉（350与400的连线断开），使200成为400的左节点</li>
+<li>将350作为200的右节点连接起来</li>
+<li>完成</li>
+</ol>
+<p>  一个印象可能不够深刻，下图可以当一个练习。</p>
+<p><img src="https://i.loli.net/2021/03/23/CJnaNqoWK9fD23i.png" alt=""></p>
+<h4 id="double-rotation">Double Rotation</h4>
+<p>  我们可以简单粗暴的理解成两次Single Rotation，以下是我们的操作流程:</p>
+<p><img src="https://i.loli.net/2021/03/23/l5XAFpmSI4nMRdr.png" alt=""></p>
+<ol>
+<li>
+<p>同样的，找到不平衡的点，这里4，6都是，我们应该选择6</p>
+</li>
+<li>
+<p>两条虚线就是我们要移动的线，我们首先移动下面一条(即7和15连着的线)，我们将15绕着7顺时针旋转，挤掉14，再将14拼接在15上，结果如图所示(仅展示移动部分)</p>
+<p><img src="https://i.loli.net/2021/03/23/Osy4dgIDmoBEpPH.png" alt=""></p>
+</li>
+<li>
+<p>同样的操作，移动6和15连着的线，将6绕着7逆时针旋转(这时候没有需要挤掉的数)，将其变为7的左节点，结束</p>
+</li>
+</ol>
+<h2 id="小结">小结</h2>
+<p>  这块内容上课时没听清楚，花了挺久的时间才整明白，感觉网上的资料写的不是特别详细，只有开始与结果图，没有过程讲解，所以我就来写一写，既强化下记忆，也能帮助有需要的人~</p>
+<p><em>网上参考资料:</em> <a href="https://www.guru99.com/avl-tree.html">https://www.guru99.com/avl-tree.html</a></p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>构造D-Heap并理解其插入删除算法|学习记录</title>
