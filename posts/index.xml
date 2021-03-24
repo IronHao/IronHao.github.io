@@ -6,8 +6,35 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-cn</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Tue, 23 Mar 2021 18:33:32 +0800</lastBuildDate>
+		<lastBuildDate>Wed, 24 Mar 2021 19:45:07 +0800</lastBuildDate>
 		<atom:link href="https://www.ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>了解Big-Oh notation,以及算法的抉择</title>
+			<link>https://www.ironhao.top/posts/%E7%AE%97%E6%B3%95%E7%9A%84%E6%8A%89%E6%8B%A9/</link>
+			<pubDate>Wed, 24 Mar 2021 19:45:07 +0800</pubDate>
+			
+			<guid>https://www.ironhao.top/posts/%E7%AE%97%E6%B3%95%E7%9A%84%E6%8A%89%E6%8B%A9/</guid>
+			<description>虽然跟着老师已经将数据结构了解了大半，但是对于O(N)的判断还是不太清楚，于是花了一个晚上的时间把书本第二章关于算法的问题又看了看，稍微写点</description>
+			<content type="html"><![CDATA[<p>  虽然跟着老师已经将数据结构了解了大半，但是对于O(N)的判断还是不太清楚，于是花了一个晚上的时间把书本第二章关于算法的问题又看了看，稍微写点总结和感悟。</p>
+<h2 id="big-oh-notation">Big-Oh notation</h2>
+<p>  也就是我们通常所说的O(N)，它表示了一个程序的算法复杂度，一般我们说的都是时间复杂度，即需要多少时间。有以下几种常见的类型：</p>
+<p><img src="https://i.loli.net/2021/03/24/LV4Cip6O3QEASsG.png" alt=""></p>
+<blockquote>
+<p>When we say that T(N) = O(f(N)), we are guaranteeing that the function T(N)grows at a rate no faster than f(N); thus f(N )is an upper bound on T(N).</p>
+</blockquote>
+<p>  就像书本说的，默认考虑的都是最坏情况，因为这才能更好的反映一个算法的好坏，保证程序在各种极端条件下的稳定性。最准确具体的O(N)算法是将加减乘除以及赋值等基础操作所花的时间当作一个单元，逐行分析计算结果，但这明显不太现实。所以我们有几个优化的小规则(个人理解版~)：</p>
+<ul>
+<li>对于循环，循坏几次，就是几次，比如<code>for(int i = 0; i &lt; n; i++)</code>这就是O(N)；内嵌循环也是，比如内部循环N次，外部N次，那就是O(N²)</li>
+<li>忽略常数，N+6次和N+1次的区别在N趋于无穷大时可以忽略不急</li>
+<li>if条件判断中，选择几个分支中O(N)最大的那个</li>
+<li>如果有递归的话，从base case开始试，一步步往上累加，从中找到规律</li>
+</ul>
+<h2 id="算法的抉择">算法的抉择</h2>
+<p>  书本后面又讲解使用了四种不同的算法去解决‘最大字串’(Maximum Subsequence Sum Problem)的问题：从暴力枚举到巧用递归再到发现利用问题的细节。时间复杂度逐步下降，但同时创造、验证算法正确性的难度也逐步提升。求快与求稳，是一个难以平衡的事情。在这个问题中，我们还可以较容易的检验每个算法（即使是最后一个）的正确与否，但是程序更复杂后就难以实现了。</p>
+<p>  权衡利弊，需要靠我进一步的学习了。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>通过Single/Double Rotation来确保AVL Tree的成立|学习记录</title>
