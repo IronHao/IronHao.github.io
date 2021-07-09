@@ -1,0 +1,66 @@
+[
+    {
+        "title": "通过Single/Double Rotation来确保AVL Tree的成立|学习记录",
+        "uri": "posts/AVL树的旋转",
+        "content": "emsp  emsp AVL   O logN                                                          Single Double Rotation              AVL    AVL tree binary search tree self balancing ability      Its height difference right left subtree nodes not greater one   emsp  emsp                              S D Rotation        emsp  emsp                 200        4     2         1      AVL       Single Double Rotation                                                                           emsp  emsp                                                                  Left   Left Rotation             Right   Right Rotation             Right   Left Rotation             Left   Right Rotation   emsp  emsp        Single Rotation                   Double Rotation     Single Rotation  emsp  emsp       R R Rotation                                                1                                             200  400       350   350 400        200  400      350  200             emsp  emsp                       Double Rotation  emsp  emsp               Single Rotation                           4 6         6                           7 15         15  7        14   14   15                          6 15      6  7                       7            emsp  emsp                                                                                            https   www guru99 com avl tree html",
+        "objectID": "posts/AVL树的旋转",
+        "date": "2021-03-23T10:33:32.000Z",
+        "draft": false,
+        "toc": false,
+        "images": null,
+        "tags": [
+            "数据结构|Data structure"
+        ]
+    },
+    {
+        "title": "构造D-Heap并理解其插入删除算法|学习记录",
+        "uri": "posts/d-heap",
+        "content": "emsp  emsp                           D Heap        debug                              D Heap                              emsp  emsp          heap            Binary heap                                                                emsp  emsp  D Heap                           D        D Heap  emsp  emsp Heap                                       0       i       i   d    i 1    d                       emsp  emsp                                                                             2                                 emsp  emsp                           i 1  d       i           emsp  emsp                          0                               0                                 d                         2                           emsp  emsp   d    4                  d                            swap           minInOneSubTree               min                             exist         1                                     include  include using namespace std  template class quadHeap   public  quadHeap     for int   0    1        quadHeap       void insert T element    data currentSize      element  int currentIndex   currentSize   1  bool notOrdered   true   notOrdered    currentIndex   0    notOrdered   swap currentIndex   currentIndex    currentIndex   1    4      T deleteMin     T returnElement   data 0   T lastElement   data   currentSize   data currentSize    static_cast  1    data 0     static_cast  1   return returnElement  data 0    lastElement  min minOne  minOne data   data 0   minOne index   0   minOne index   1   return true  else return false    void print     int   0   i   1     minOne exist   false  return minOne    for int   index   4   2    1     break     minOne data   data i     minOne data   data i   minOne index   i      return minOne       int main     quadHeap testHeap  testHeap insert 10   testHeap insert 12   testHeap insert 1   testHeap insert 14   testHeap insert 6   testHeap insert 5   testHeap insert 8   cout    Test    endl  cout   testHeap deleteMin     endl  cout   testHeap deleteMin     endl    testHeap isEmpty      cout   testHeap deleteMin     endl  testHeap print      testHeap insert 15   testHeap insert 3   testHeap insert 9   testHeap insert 7   testHeap insert 4   testHeap insert 11   testHeap insert 13   testHeap insert 2   testHeap print          emsp  emsp                        Mark A  Weiss   Data Structures Algorithm Analysis C   Pearson  2014        Mark A  Weiss   Data Structures Algorithm Analysis C   Pearson  2014",
+        "objectID": "posts/d-heap",
+        "date": "2021-03-19T09:14:50.000Z",
+        "draft": false,
+        "toc": false,
+        "images": null,
+        "tags": [
+            "数据结构|Data structure"
+        ]
+    },
+    {
+        "title": "反反复复的日常",
+        "uri": "posts/firstDay",
+        "content": "typecho                                     github page",
+        "objectID": "posts/firstDay",
+        "date": "2021-03-12T12:09:01.000Z",
+        "draft": false
+    },
+    {
+        "title": "完善博客的第一步",
+        "uri": "posts/完善博客",
+        "content": "github page          github page                PicGo                                                   github             yourname github io    github           GitHub Desktop                               github                  Set Desktop                                  hugo           public  PS                                      http   yourname github io                     setting      Github Page             Custom domain               HTTPS          cmd    ping yourname github io      ip                     CNAME  github          A     ip                                                          Cloudflare   HTTPS                Cloudflare               DNS                 DNS          PicGo     PicGo Github                                SM MS          User   Dashboard   API Token   Generate Secret Token              picgo                                     https   zhuanlan zhihu com p 37752930",
+        "objectID": "posts/完善博客",
+        "date": "2021-03-13T07:55:59.000Z",
+        "draft": false
+    },
+    {
+        "title": "了解Big-Oh notation,以及算法的抉择",
+        "uri": "posts/算法的抉择",
+        "content": "emsp  emsp                        O N                                                   Big Oh notation  emsp  emsp           O N                                                     When say T N    O f N    guaranteeing function T N grows rate no faster f N   thus f N  is upper bound T N    emsp  emsp                                                             O N                                                                                        for int   0    n  i      O N               N    N     O N        N 6  N 1     N             if             O N                base case                          emsp  emsp                            Maximum Subsequence Sum Problem                                                                                                                                  emsp  emsp",
+        "objectID": "posts/算法的抉择",
+        "date": "2021-03-24T11:45:07.000Z",
+        "draft": false,
+        "toc": false,
+        "images": null,
+        "tags": [
+            "学习有感",
+            "算法|Algorithm"
+        ]
+    },
+    {
+        "title": "约瑟夫环的两种设计——结构化设计与OOP | 学习记录",
+        "uri": "posts/约瑟夫环的两种设计",
+        "content": "emsp  emsp                                                                                         emsp  emsp                                                                               include using namespace std  int main     int nrOfPeople   100         int nrOfDead   0          int M           M     M    int index   0      index   int number   0          bool survival nrOfPeople   1         n       cout   M                    int   1  nrOfPeople  index   1   survival index   number     number    M    number   0  cout  include  JosephusProblem cpp  using namespace std  int main     JosephusProblem j 3  41   j initializa    cout nrOfPeople   N  this  nrOfDead   0    void initializa     PeopleInJos  temp   head  for int   2  setNext new PeopleInJos i    temp   temp  getNext      temp  setNext head     int start     int tempI   0  currentP   head     currentP  survival      if num  out      currentP  kill    nrOfDead        currentP   currentP  getNext       nrOfDead    nrOfPeople   1   currentP   head   int   1  survival      return i    currentP   currentP  getNext      return  1    private  Number  num  PeopleInJos  head  PeopleInJos  currentP  int nrOfPeople  int nrOfDead        Number cpp   pragma once using namespace std  class Number   public  Number       Number int M    this  currentN   0  this  setM   M    bool out     currentN     currentN    setM    currentN   0  return true    else   return false      private  int currentN  int setM        PeopleInJos cpp  pragma once using namespace std  class PeopleInJos   public  PeopleInJos       PeopleInJos int i    this  isSurvival   true  this  index   i    PeopleInJos  getNext     return this  next    void setNext PeopleInJos  next    this  next   next    bool survival     return this  isSurvival    void kill     this  isSurvival   false    private  PeopleInJos  next  bool isSurvival  int index           emsp  emsp                OOP                                                      OOP",
+        "objectID": "posts/约瑟夫环的两种设计",
+        "date": "2021-03-14T12:42:34.000Z",
+        "draft": false
+    }
+]
