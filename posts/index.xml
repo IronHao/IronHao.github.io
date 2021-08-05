@@ -6,8 +6,59 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-cn</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Wed, 24 Mar 2021 19:45:07 +0800</lastBuildDate>
+		<lastBuildDate>Thu, 05 Aug 2021 21:36:27 +0800</lastBuildDate>
 		<atom:link href="https://www.ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Unity3D导入素材与搭建场景|Unity3D学习日记(一)</title>
+			<link>https://www.ironhao.top/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%B8%80/</link>
+			<pubDate>Thu, 05 Aug 2021 21:36:27 +0800</pubDate>
+			
+			<guid>https://www.ironhao.top/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%B8%80/</guid>
+			<description>前言 本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。教程参考麦扣 @M_Studio的 3D RPG 核心教程。 正文 从</description>
+			<content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。<em><strong>教程参考麦扣 @M_Studio的 3D RPG 核心教程。</strong></em></p>
+<h2 id="正文">正文</h2>
+<h4 id="从商店导入所需内容">从商店导入所需内容</h4>
+<p>点击左上角的 Window -&gt; Package Manager 打开对应窗体</p>
+<p><img src="https://i.loli.net/2021/08/04/beJkMYX7GSH2oIa.png" alt=""></p>
+<p>在新打开的窗体中的左上角，可以选择范围。</p>
+<ul>
+<li>一些从Unity商店中购买的素材可以在 My Assets 里找到，如果购买了而没有显示，请点击下方中间的刷新按钮，刷新一下即可</li>
+<li>而如 Universal RP 等Unity提供的功能则可在 Unity Registry 里找到</li>
+</ul>
+<p><img src="https://i.loli.net/2021/08/04/CpOqrWzfUI73VDY.png" alt=""></p>
+<p>找到对应内容后，点击右下角 Install 安装即可</p>
+<h4 id="创建渲染管线">创建渲染管线</h4>
+<p>右键 Assets，选择如下图的操作，点击确认，生成。</p>
+<p><img src="https://i.loli.net/2021/08/04/HOPfpWGi6twNLdy.png" alt=""></p>
+<p>再在右上角的 Edit -&gt; Project Setting 里找到 Graphics，设置相应的通用管线</p>
+<p><img src="https://i.loli.net/2021/08/04/bNEXFxaVLHkURSf.png" alt=""></p>
+<p>在Quality里的Rendering里进行同样的操作，设置通用管线</p>
+<p>在导入支持URP的素材后，可以点击右上角的 Edit 按钮，执行如下操作 。其中第一个是更新全部，第二个是只更新选中的部分</p>
+<p><img src="https://i.loli.net/2021/08/04/R3asLczug6vyCWm.png" alt=""></p>
+<h4 id="修改通用渲染管线设置以调整阴影等">修改通用渲染管线设置以调整阴影等</h4>
+<p>找到我们之前创建的通用渲染管线的Asset，单击，右边的Inspector里就会显示一些可供修改的参数。包括品质、阴影、抗锯齿等。</p>
+<p>Shadows栏中，Max Distance指出最远的阴影渲染距离，超过后不再渲染，Cascade Count指出将阴影分几个层级，达到越远越虚，不同距离阴影渲染级别不同等效果。Soft Shadows勾选后阴影会变得更加柔和。</p>
+<h4 id="取消显示天空盒子和替换天空盒子">取消显示天空盒子和替换天空盒子</h4>
+<p>选中Scene场景，然后根据如下图所示操作取消Skybox即可。</p>
+<p><img src="https://i.loli.net/2021/08/04/B5vP9a6yM3Gg4ck.png" alt=""></p>
+<p>替换天空盒子的话，可以在Unity商店里找到相应的素材并导入，记得更新全部URP素材，这样素材才能正常显示。然后找到左上角的 Window 菜单，按下图所示操作，并在打开的文件夹中选择 Environment ,其中的 Skybox Matertial 就是我们可以替换的部分了</p>
+<p><img src="https://i.loli.net/2021/08/04/2j6zM1yBVwxvCuN.png" alt=""></p>
+<p>另外，你选择的天空盒子的Inspector中有一些参数可以修改，这里不再说明。</p>
+<p>如果发现场景光颜色变得不一样，那是因为默认环境光跟随天空盒子颜色的变化而变化，我们可以在Lighting的Environment栏的Environment Lighting里进行修改。Source可以修改光来源。其中对于Skybox而言，Intensity Multiplier可以控制光受天空盒子影响的强弱。</p>
+<p><img src="https://i.loli.net/2021/08/04/nzZLkig6cNS2pMA.png" alt=""></p>
+<h4 id="光照设置">光照设置</h4>
+<p>同样在之前设置天空盒子的Lighting里，不过是在Scene栏，我们选择 New Lighting Settings 选项，Unity会为我们自动创建。然后在Lighting的Scene栏中，选择Generate Lighting，Unity就会为我们渲染光线。<strong>注意，GPU显存较少等情况无法使用GPU进行渲染。</strong></p>
+<h4 id="场景搭建小技巧">场景搭建小技巧</h4>
+<ul>
+<li><strong>V键为顶点自动吸附</strong>，按住V键进行方块的搭建，可以快速吸附到另一个物体（如地面）上，不需要列文虎克式微调了。具体用法，<strong>选中你想要移动的物体→按住v键，确定你要对的顶点→然后双击鼠标左键移动</strong>。</li>
+<li>Prefab建议拖拽到场景栏中，而不是直接拖拽到场景中，这样会保持为（0，0，0）坐标，方便查找和后续的移动。</li>
+<li>使用空的物体来作为父物体并命名，将场景中的物体拖拽到该物体上，作为它的子物体，来实现对场景中的各类物体的分类。（操作流程： 场景栏右键-&gt; Create Empty）</li>
+<li>还可以使用空物体并命名，作为分隔栏使用，来区分。</li>
+</ul>
+]]></content>
+		</item>
 		
 		<item>
 			<title>了解Big-Oh notation,以及算法的抉择</title>

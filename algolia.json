@@ -34,6 +34,19 @@
         "draft": false
     },
     {
+        "title": "Unity3D导入素材与搭建场景|Unity3D学习日记(一)",
+        "uri": "posts/Unity学习日记一",
+        "content": "Unity                                        M_Studio  3D RPG                           Window    Package Manager                                Unity            Assets                                       Universal RP  Unity         Unity Registry                   Install                Assets                          Edit    Project Setting     Graphics            Quality  Rendering                     URP              Edit                                                                     Asset       Inspector                             Shadows   Max Distance                    Cascade Count                                  Soft Shadows                                Scene                Skybox                Unity                    URP                       Window                        Environment      Skybox Matertial                          Inspector                                                               Lighting Environment  Environment Lighting      Source            Skybox   Intensity Multiplier                                  Lighting      Scene       New Lighting Settings    Unity            Lighting Scene     Generate Lighting Unity             GPU           GPU              V           V                                                          v                       Prefab                             0 0 0                                                                                      Create Empty",
+        "objectID": "posts/Unity学习日记一",
+        "date": "2021-08-05T13:36:27.000Z",
+        "draft": false,
+        "toc": true,
+        "images": null,
+        "tags": [
+            "Unity"
+        ]
+    },
+    {
         "title": "完善博客的第一步",
         "uri": "posts/完善博客",
         "content": "github page          github page                PicGo                                                   github             yourname github io    github           GitHub Desktop                               github                  Set Desktop                                  hugo           public  PS                                      http   yourname github io                     setting      Github Page             Custom domain               HTTPS          cmd    ping yourname github io      ip                     CNAME  github          A     ip                                                          Cloudflare   HTTPS                Cloudflare               DNS                 DNS          PicGo     PicGo Github                                SM MS          User   Dashboard   API Token   Generate Secret Token              picgo                                     https   zhuanlan zhihu com p 37752930",
