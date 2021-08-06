@@ -34,7 +34,7 @@
         "draft": false
     },
     {
-        "title": "Unity3D导入素材与搭建场景|Unity3D学习日记(一)",
+        "title": "Unity3D导入素材与搭建场景|Unity3D学习日记（一）",
         "uri": "posts/Unity学习日记一",
         "content": "Unity                                        M_Studio  3D RPG                           Window    Package Manager                                Unity            Assets                                       Universal RP  Unity         Unity Registry                   Install                Assets                          Edit    Project Setting     Graphics            Quality  Rendering                     URP              Edit                                                                     Asset       Inspector                             Shadows   Max Distance                    Cascade Count                                  Soft Shadows                                Scene                Skybox                Unity                    URP                       Window                        Environment      Skybox Matertial                          Inspector                                                               Lighting Environment  Environment Lighting      Source            Skybox   Intensity Multiplier                                  Lighting      Scene       New Lighting Settings    Unity            Lighting Scene     Generate Lighting Unity             GPU           GPU              V           V                                                          v                       Prefab                             0 0 0                                                                                      Create Empty",
         "objectID": "posts/Unity学习日记一",
@@ -42,6 +42,19 @@
         "draft": false,
         "toc": true,
         "images": null,
+        "tags": [
+            "Unity"
+        ]
+    },
+    {
+        "title": "使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）",
+        "uri": "posts/Unity学习日记二",
+        "content": "Unity                                        M_Studio  3D RPG            Polybrush        Window    Package Manager    Unity Registry   Polybrush                       Samples     Shader       URP                  Polybrush         Tools    Polybrush    Polybrush Window                                                               Texture            Outer Radius       Inner Radius       Strength       Brush Mirroring                                         X Z                                 Polybrush                                                                                                  Ctrl                                                                                                                                                                      Lit Vertex Color URP      Create    Material Unity                                                                                                                   Brush                                   Fill                               Flood                                          Current Palette              Shift                                     Ctrl                                             Brush Loadout                                              Ctrl                                                                       Hit Surface Parent                                                               V                    Polybrush",
+        "objectID": "posts/Unity学习日记二",
+        "date": "2021-08-06T14:52:37.000Z",
+        "draft": false,
+        "toc": true,
+        "image": null,
         "tags": [
             "Unity"
         ]

@@ -7,20 +7,20 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
-<meta itemprop="name" content="Unity3D导入素材与搭建场景|Unity3D学习日记（一）">
-<meta itemprop="description" content="前言 本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。教程参考麦扣 @M_Studio的 3D RPG 核心教程。 正文 从"><meta itemprop="datePublished" content="2021-08-05T21:36:27&#43;08:00" />
-<meta itemprop="dateModified" content="2021-08-05T21:36:27&#43;08:00" />
-<meta itemprop="wordCount" content="1295">
-<meta itemprop="keywords" content="Unity," /><meta property="og:title" content="Unity3D导入素材与搭建场景|Unity3D学习日记（一）" />
-<meta property="og:description" content="前言 本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。教程参考麦扣 @M_Studio的 3D RPG 核心教程。 正文 从" />
+<meta itemprop="name" content="使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）">
+<meta itemprop="description" content="前言 本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。教程参考麦扣 @M_Studio的 3D RPG 核心教程。 正文 安"><meta itemprop="datePublished" content="2021-08-06T22:52:37&#43;08:00" />
+<meta itemprop="dateModified" content="2021-08-06T22:52:37&#43;08:00" />
+<meta itemprop="wordCount" content="1355">
+<meta itemprop="keywords" content="Unity," /><meta property="og:title" content="使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）" />
+<meta property="og:description" content="前言 本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。教程参考麦扣 @M_Studio的 3D RPG 核心教程。 正文 安" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.ironhao.top/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%B8%80/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-08-05T21:36:27&#43;08:00" />
-<meta property="article:modified_time" content="2021-08-05T21:36:27&#43;08:00" />
+<meta property="og:url" content="https://www.ironhao.top/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%BA%8C/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-06T22:52:37&#43;08:00" />
+<meta property="article:modified_time" content="2021-08-06T22:52:37&#43;08:00" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Unity3D导入素材与搭建场景|Unity3D学习日记（一）"/>
-<meta name="twitter:description" content="前言 本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。教程参考麦扣 @M_Studio的 3D RPG 核心教程。 正文 从"/>
+<meta name="twitter:title" content="使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）"/>
+<meta name="twitter:description" content="前言 本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。教程参考麦扣 @M_Studio的 3D RPG 核心教程。 正文 安"/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -29,7 +29,7 @@
 	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
 	<link rel="shortcut icon" href="/favicon.ico">
 
-	<title>Unity3D导入素材与搭建场景|Unity3D学习日记（一）</title>
+	<title>使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）</title>
 	<link rel="stylesheet" href="https://www.ironhao.top/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
 	<style type="text/css">@font-face{
     font-family: 'Noto Sans CJK';
@@ -102,53 +102,63 @@
 	<main class="site-main section-inner animated fadeIn faster">
 		<article class="thin">
 			<header class="post-header">
-				<div class="post-meta"><span>Aug 5, 2021</span></div>
-				<h1>Unity3D导入素材与搭建场景|Unity3D学习日记（一）</h1>
+				<div class="post-meta"><span>Aug 6, 2021</span></div>
+				<h1>使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）</h1>
 			</header>
 			<div class="content">
 				<h2 id="前言">前言<a href="#前言" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。<em><strong>教程参考麦扣 @M_Studio的 3D RPG 核心教程。</strong></em></p>
 <h2 id="正文">正文<a href="#正文" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
-<h4 id="从商店导入所需内容">从商店导入所需内容<a href="#从商店导入所需内容" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
-<p>点击左上角的 Window -&gt; Package Manager 打开对应窗体</p>
-<p><img src="https://i.loli.net/2021/08/04/beJkMYX7GSH2oIa.png" alt=""></p>
-<p>在新打开的窗体中的左上角，可以选择范围。</p>
+<h3 id="安装polybrush">安装Polybrush<a href="#安装polybrush" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>同样通过点击 <code>Window -&gt; Package Manager</code> 并选择Unity Registry，找到Polybrush进行安装。注意，除了上述常规操作外，还需要单击<code>Samples</code>导入对应的Shader，如我们这使用URP，就需要导入第二个，如图所示。</p>
+<p><!-- raw HTML omitted --></p>
+<h3 id="使用polybrush">使用Polybrush<a href="#使用polybrush" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>通过点击右上角的<code>Tools -&gt; Polybrush -&gt; Polybrush Window </code>来打开窗体。</p>
+<p><!-- raw HTML omitted --></p>
+<p>这里，<strong>从左往右</strong>的功能分别是：调整地面的高矮等状态；柔化效果；将当前的物体刷上不同的颜色；将预制体刷到场景中；将Texture刷到当前场景中。</p>
+<p>另外，<code>Outer Radius</code>是外圈的大小，<code>Inner Radius</code>是内圈的大小，<code>Strength</code>是设置强度。</p>
+<p><code>Brush Mirroring</code> 可以选择镜像的方向，从而刷出对称的图形。可以同时选择一个或多个轴，如我这里选择了X和Z轴。</p>
+<p><!-- raw HTML omitted --></p>
+<h4 id="调整地面高矮">调整地面高矮<a href="#调整地面高矮" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<p>首先选中我们要进行修改的物体（这里是地面）并将Polybrush切换到第一个模式。此时地面会出现许多这样的三角形，每个点都是可以修改的。圆环是我们刷子的范围，<strong>可以通过触控板的放大缩小手势修改大小</strong>。</p>
+<p><img src="https://i.loli.net/2021/08/06/e2iNcvX38sgR4Hu.png" alt=""></p>
+<p><strong>鼠标点击拖拽</strong>可以向上拉升（或者双击也行，一次会升高一点）</p>
+<p><!-- raw HTML omitted --></p>
+<p><strong>按住Ctrl键</strong>会发现圆心向上的射线变成向下的了，此时再<strong>点击拖拽</strong>就可以向下挤压。</p>
+<p><img src="https://i.loli.net/2021/08/06/fDLE9pnC1d2QYVi.png" alt=""></p>
+<h4 id="柔化效果">柔化效果<a href="#柔化效果" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<p><strong>选择模式二，鼠标点击拖拽即可</strong>，方法和调整地面高矮类似。个人感觉有点像模式一的撤销操作，对凸处执行会让棱角往里收，对凹处执行则会让凹陷处往回收。可以自行尝试下。</p>
+<h4 id="将当前的物体刷上不同的颜色">将当前的物体刷上不同的颜色<a href="#将当前的物体刷上不同的颜色" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<p>**选择模式三。另外，还要修改材质。**找到并选中我们之前导入的文件夹中的<code>Lit Vertex Color URP </code>文件，右键<code>Create -&gt; Material</code>,Unity会为我们自动创建生成相应的材质。之后我们直接将材质拖拽到场景对应的物体（这里是地面）上去即可。</p>
+<p><!-- raw HTML omitted --></p>
+<p>然后我们就可以尽情的刷颜色啦。<strong>这个的用处主要是初期场景原型搭建时用于区分各个区域，方便后续的操作。</strong></p>
+<p><!-- raw HTML omitted --></p>
+<p>另外，这里有三个功能选项，分别是</p>
 <ul>
-<li>一些从Unity商店中购买的素材可以在 My Assets 里找到，如果购买了而没有显示，请点击下方中间的刷新按钮，刷新一下即可</li>
-<li>而如 Universal RP 等Unity提供的功能则可在 Unity Registry 里找到</li>
+<li><code>Brush</code>像喷漆一样喷上颜色，同一块颜色可以越喷越深，不同颜色也可以相互影响。</li>
+<li><code>Fill</code>根据三角来填充，填充上去就是最深的颜色了，会覆盖底层的颜色。</li>
+<li><code>Flood</code>将整个物体刷成某个颜色</li>
 </ul>
-<p><img src="https://i.loli.net/2021/08/04/CpOqrWzfUI73VDY.png" alt=""></p>
-<p>找到对应内容后，点击右下角 Install 安装即可</p>
-<h4 id="创建渲染管线">创建渲染管线<a href="#创建渲染管线" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
-<p>右键 Assets，选择如下图的操作，点击确认，生成。</p>
-<p><img src="https://i.loli.net/2021/08/04/HOPfpWGi6twNLdy.png" alt=""></p>
-<p>再在右上角的 Edit -&gt; Project Setting 里找到 Graphics，设置相应的通用管线</p>
-<p><img src="https://i.loli.net/2021/08/04/bNEXFxaVLHkURSf.png" alt=""></p>
-<p>在Quality里的Rendering里进行同样的操作，设置通用管线</p>
-<p>在导入支持URP的素材后，可以点击右上角的 Edit 按钮，执行如下操作 。其中第一个是更新全部，第二个是只更新选中的部分</p>
-<p><img src="https://i.loli.net/2021/08/04/R3asLczug6vyCWm.png" alt=""></p>
-<h4 id="修改通用渲染管线设置以调整阴影等">修改通用渲染管线设置以调整阴影等<a href="#修改通用渲染管线设置以调整阴影等" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
-<p>找到我们之前创建的通用渲染管线的Asset，单击，右边的Inspector里就会显示一些可供修改的参数。包括品质、阴影、抗锯齿等。</p>
-<p>Shadows栏中，Max Distance指出最远的阴影渲染距离，超过后不再渲染，Cascade Count指出将阴影分几个层级，达到越远越虚，不同距离阴影渲染级别不同等效果。Soft Shadows勾选后阴影会变得更加柔和。</p>
-<h4 id="取消显示天空盒子和替换天空盒子">取消显示天空盒子和替换天空盒子<a href="#取消显示天空盒子和替换天空盒子" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
-<p>选中Scene场景，然后根据如下图所示操作取消Skybox即可。</p>
-<p><img src="https://i.loli.net/2021/08/04/B5vP9a6yM3Gg4ck.png" alt=""></p>
-<p>替换天空盒子的话，可以在Unity商店里找到相应的素材并导入，记得更新全部URP素材，这样素材才能正常显示。然后找到左上角的 Window 菜单，按下图所示操作，并在打开的文件夹中选择 Environment ,其中的 Skybox Matertial 就是我们可以替换的部分了</p>
-<p><img src="https://i.loli.net/2021/08/04/2j6zM1yBVwxvCuN.png" alt=""></p>
-<p>另外，你选择的天空盒子的Inspector中有一些参数可以修改，这里不再说明。</p>
-<p>如果发现场景光颜色变得不一样，那是因为默认环境光跟随天空盒子颜色的变化而变化，我们可以在Lighting的Environment栏的Environment Lighting里进行修改。Source可以修改光来源。其中对于Skybox而言，Intensity Multiplier可以控制光受天空盒子影响的强弱。</p>
-<p><img src="https://i.loli.net/2021/08/04/nzZLkig6cNS2pMA.png" alt=""></p>
-<h4 id="光照设置">光照设置<a href="#光照设置" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
-<p>同样在之前设置天空盒子的Lighting里，不过是在Scene栏，我们选择 New Lighting Settings 选项，Unity会为我们自动创建。然后在Lighting的Scene栏中，选择Generate Lighting，Unity就会为我们渲染光线。<strong>注意，GPU显存较少等情况无法使用GPU进行渲染。</strong></p>
-<h4 id="场景搭建小技巧">场景搭建小技巧<a href="#场景搭建小技巧" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
-<ul>
-<li><strong>V键为顶点自动吸附</strong>，按住V键进行方块的搭建，可以快速吸附到另一个物体（如地面）上，不需要列文虎克式微调了。具体用法，<strong>选中你想要移动的物体→按住v键，确定你要对的顶点→然后双击鼠标左键移动</strong>。</li>
-<li>Prefab建议拖拽到场景栏中，而不是直接拖拽到场景中，这样会保持为（0，0，0）坐标，方便查找和后续的移动。</li>
-<li>使用空的物体来作为父物体并命名，将场景中的物体拖拽到该物体上，作为它的子物体，来实现对场景中的各类物体的分类。（操作流程： 场景栏右键-&gt; Create Empty）</li>
-<li>还可以使用空物体并命名，作为分隔栏使用，来区分。</li>
-</ul>
+<h4 id="将预制体刷到场景中">将预制体刷到场景中<a href="#将预制体刷到场景中" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<p>选择模式四，并将需要的预制体选中并添加到<code>Current Palette</code>中。<strong>这里选中第一个，然后按住Shift并选中最后一个，就会把全部选中，此时如果有部分预制体是你不想选中的，再按住Ctrl并点击，点击的预制体就会被取消选中。</strong></p>
+<p>再从调色板中将你想要刷的物体勾选上，就会显示在上方的<code>Brush Loadout</code>中，调节每个物体下方的按钮可以选择出现的概率。</p>
+<p><!-- raw HTML omitted --></p>
+<p>然后在场景上点击就会生成啦！如果要删除，<strong>按住Ctrl再去点按生成的物体</strong>就行。由这种方法生成的树会有一圈蓝边，方便我们与其他的进行区分（同时我们也只能删除由这种方法生成的物体）。另外由于默认勾选了<code>Hit Surface is Parent</code>,所有生成的树的父类都是我们的选中的地面。</p>
+<p><!-- raw HTML omitted --></p>
+<p>另外生成的时候有些物体并没有完全与地面贴合，这时候就需要我们自己手动调整了（可使用V键快速吸附！参考上一节的内容）。</p>
+<h2 id="后记">后记<a href="#后记" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>Polybrush还是非常方便好用的，感觉要是能够结合代码，自动生成，就可以创建随机地图了。这块有空可以再研究研究！</p>
 
 			</div>
+
+<div class="related-posts thin">
+	<h2></h2>
+	<ul>
+	
+	<li><a href="/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%B8%80/">Unity3D导入素材与搭建场景|Unity3D学习日记（一）</a></li>
+	
+	</ul>
+</div>
 
 			<hr class="post-end">
 			<footer class="post-info">
@@ -156,7 +166,7 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://www.ironhao.top/tags/unity">Unity</a></span>
 				</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2021-08-05 21:36 &#43;0800</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2021-08-06 22:52 &#43;0800</p>
 			</footer>
 		</article>
 		<aside id="toc">
@@ -166,18 +176,17 @@
     <li><a href="#前言">前言</a></li>
     <li><a href="#正文">正文</a>
       <ul>
-        <li></li>
+        <li><a href="#安装polybrush">安装Polybrush</a></li>
+        <li><a href="#使用polybrush">使用Polybrush</a></li>
       </ul>
     </li>
+    <li><a href="#后记">后记</a></li>
   </ul>
 </nav>
 		</aside>
 		<div class="post-nav thin">
-			<a class="next-post" href="https://www.ironhao.top/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%BA%8C/">
-				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;</span><br><span>使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）</span>
-			</a>
-			<a class="prev-post" href="https://www.ironhao.top/posts/%E7%AE%97%E6%B3%95%E7%9A%84%E6%8A%89%E6%8B%A9/">
-				<span class="post-nav-label">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>了解Big-Oh notation,以及算法的抉择</span>
+			<a class="prev-post" href="https://www.ironhao.top/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%B8%80/">
+				<span class="post-nav-label">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Unity3D导入素材与搭建场景|Unity3D学习日记（一）</span>
 			</a>
 		</div>
 		<div id="comments" class="thin">

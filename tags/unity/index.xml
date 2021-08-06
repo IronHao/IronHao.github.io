@@ -7,9 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 05 Aug 2021 21:36:27 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/tags/unity/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 06 Aug 2021 22:52:37 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/tags/unity/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Unity3D导入素材与搭建场景|Unity3D学习日记(一)</title>
+      <title>使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）</title>
+      <link>https://www.ironhao.top/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%BA%8C/</link>
+      <pubDate>Fri, 06 Aug 2021 22:52:37 +0800</pubDate>
+      
+      <guid>https://www.ironhao.top/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%BA%8C/</guid>
+      <description>前言 本文为学习Unity途中的日常学习记录，主要是给自己的归纳总结，如有错误，还请指正。教程参考麦扣 @M_Studio的 3D RPG 核心教程。 正文 安</description>
+    </item>
+    
+    <item>
+      <title>Unity3D导入素材与搭建场景|Unity3D学习日记（一）</title>
       <link>https://www.ironhao.top/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%B8%80/</link>
       <pubDate>Thu, 05 Aug 2021 21:36:27 +0800</pubDate>
       
