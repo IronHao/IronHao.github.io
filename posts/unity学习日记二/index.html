@@ -111,28 +111,28 @@
 <h2 id="正文">正文<a href="#正文" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <h3 id="安装polybrush">安装Polybrush<a href="#安装polybrush" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <p>同样通过点击 <code>Window -&gt; Package Manager</code> 并选择Unity Registry，找到Polybrush进行安装。注意，除了上述常规操作外，还需要单击<code>Samples</code>导入对应的Shader，如我们这使用URP，就需要导入第二个，如图所示。</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://i.loli.net/2021/08/06/QOzM3gmZXayKnVs.png" style="zoom:67%;" /></p>
 <h3 id="使用polybrush">使用Polybrush<a href="#使用polybrush" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <p>通过点击右上角的<code>Tools -&gt; Polybrush -&gt; Polybrush Window </code>来打开窗体。</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://i.loli.net/2021/08/06/MtzAOgSBKTer4pI.png" style="zoom: 50%;" /></p>
 <p>这里，<strong>从左往右</strong>的功能分别是：调整地面的高矮等状态；柔化效果；将当前的物体刷上不同的颜色；将预制体刷到场景中；将Texture刷到当前场景中。</p>
 <p>另外，<code>Outer Radius</code>是外圈的大小，<code>Inner Radius</code>是内圈的大小，<code>Strength</code>是设置强度。</p>
 <p><code>Brush Mirroring</code> 可以选择镜像的方向，从而刷出对称的图形。可以同时选择一个或多个轴，如我这里选择了X和Z轴。</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://i.loli.net/2021/08/06/qkM4wpmXDNhoVA6.png" style="zoom:67%;" /></p>
 <h4 id="调整地面高矮">调整地面高矮<a href="#调整地面高矮" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p>首先选中我们要进行修改的物体（这里是地面）并将Polybrush切换到第一个模式。此时地面会出现许多这样的三角形，每个点都是可以修改的。圆环是我们刷子的范围，<strong>可以通过触控板的放大缩小手势修改大小</strong>。</p>
 <p><img src="https://i.loli.net/2021/08/06/e2iNcvX38sgR4Hu.png" alt=""></p>
 <p><strong>鼠标点击拖拽</strong>可以向上拉升（或者双击也行，一次会升高一点）</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://i.loli.net/2021/08/06/yj2que3cI6GC5wm.png" style="zoom:67%;" /></p>
 <p><strong>按住Ctrl键</strong>会发现圆心向上的射线变成向下的了，此时再<strong>点击拖拽</strong>就可以向下挤压。</p>
 <p><img src="https://i.loli.net/2021/08/06/fDLE9pnC1d2QYVi.png" alt=""></p>
 <h4 id="柔化效果">柔化效果<a href="#柔化效果" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p><strong>选择模式二，鼠标点击拖拽即可</strong>，方法和调整地面高矮类似。个人感觉有点像模式一的撤销操作，对凸处执行会让棱角往里收，对凹处执行则会让凹陷处往回收。可以自行尝试下。</p>
 <h4 id="将当前的物体刷上不同的颜色">将当前的物体刷上不同的颜色<a href="#将当前的物体刷上不同的颜色" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p>**选择模式三。另外，还要修改材质。**找到并选中我们之前导入的文件夹中的<code>Lit Vertex Color URP </code>文件，右键<code>Create -&gt; Material</code>,Unity会为我们自动创建生成相应的材质。之后我们直接将材质拖拽到场景对应的物体（这里是地面）上去即可。</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://i.loli.net/2021/08/06/YZpFLIlgf6M1KeB.png" style="zoom: 67%;" /></p>
 <p>然后我们就可以尽情的刷颜色啦。<strong>这个的用处主要是初期场景原型搭建时用于区分各个区域，方便后续的操作。</strong></p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://i.loli.net/2021/08/06/oNYCR3AqSMrEWTP.png" style="zoom:67%;" /></p>
 <p>另外，这里有三个功能选项，分别是</p>
 <ul>
 <li><code>Brush</code>像喷漆一样喷上颜色，同一块颜色可以越喷越深，不同颜色也可以相互影响。</li>
@@ -142,9 +142,9 @@
 <h4 id="将预制体刷到场景中">将预制体刷到场景中<a href="#将预制体刷到场景中" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p>选择模式四，并将需要的预制体选中并添加到<code>Current Palette</code>中。<strong>这里选中第一个，然后按住Shift并选中最后一个，就会把全部选中，此时如果有部分预制体是你不想选中的，再按住Ctrl并点击，点击的预制体就会被取消选中。</strong></p>
 <p>再从调色板中将你想要刷的物体勾选上，就会显示在上方的<code>Brush Loadout</code>中，调节每个物体下方的按钮可以选择出现的概率。</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://i.loli.net/2021/08/06/vrnFfkpqOB6txD3.png" style="zoom:50%;" /></p>
 <p>然后在场景上点击就会生成啦！如果要删除，<strong>按住Ctrl再去点按生成的物体</strong>就行。由这种方法生成的树会有一圈蓝边，方便我们与其他的进行区分（同时我们也只能删除由这种方法生成的物体）。另外由于默认勾选了<code>Hit Surface is Parent</code>,所有生成的树的父类都是我们的选中的地面。</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://i.loli.net/2021/08/06/ESgq2fGOjLDK3Vv.png" style="zoom:50%;" /></p>
 <p>另外生成的时候有些物体并没有完全与地面贴合，这时候就需要我们自己手动调整了（可使用V键快速吸附！参考上一节的内容）。</p>
 <h2 id="后记">后记<a href="#后记" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>Polybrush还是非常方便好用的，感觉要是能够结合代码，自动生成，就可以创建随机地图了。这块有空可以再研究研究！</p>
