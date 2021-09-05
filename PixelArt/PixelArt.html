@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pixel Art|我的像素画记录</title>
+  <style type="text/css">
+  @font-face {
+      font-family: pixelFont;
+      src: url("ipix_12px.ttf");
+  }
+  body{
+    margin: 0;
+    padding: 0;
+    font-family: pixelFont;
+  }
+.pubu{
+    position: absolute;
+    width: 1100px;
+    left: 50%;
+    margin-left: -550px;
+}
+.box{
+    padding:20px 0 0 20px;
+    float: left;
+}
+.box img{
+    width: 200px;
+    height: auto;
+    opacity: 0;
+}
+.t,.p {
+        display:flex;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .title,.para {
+        margin-bottom: 0px;
+        display:inline-block;
+        animation-name:hc;
+        animation-duration: .5s;
+        transition: all 600ms cubic-bezier(0.785, 0.135, 0.15, 0.86);
+        animation-fill-mode: both;
+    }
+
+    @keyframes hc{
+        from {transform: translateY(30%);opacity: 0;}
+        to {transform: translateY(0%);opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+    
+    <div class="display-1 t">
+        <span class="title"><h1>我的</h1></span>
+        <span class="title"><h1>像素画</h1></span>
+        <span class="title"><h1>学习</h1></span>
+        <span class="title"><h1>记录</h1></span>
+    </div>
+
+    <div class="display-4 p">
+       <span class="para">My</span>&nbsp;
+       <span class="para">Pixel</span>&nbsp;
+       <span class="para">Art</span>&nbsp;
+       <span class="para">Learning</span>&nbsp;
+       <span class="para">Record</span>&nbsp;
+
+    </div>
+
+
+    <div class="pubu">
+        <div class="box">
+              <img data-original="https://i.loli.net/2021/09/04/FvTCipQtr1zdWYD.gif" src="https://i.loli.net/2021/09/04/FvTCipQtr1zdWYD.gif" alt="">
+        </div>
+        <div class="box">
+            <img data-original="https://i.loli.net/2021/09/04/QnNjepzru8yXWJw.png" src="https://i.loli.net/2021/09/04/QnNjepzru8yXWJw.png" alt="">
+        </div>
+        <div class="box">
+            <img data-original="https://i.loli.net/2021/09/04/wVciISL5Bk7hFnt.png" src="https://i.loli.net/2021/09/04/wVciISL5Bk7hFnt.png" alt="">
+        </div>
+        <div class="box">
+            <img data-original="https://i.loli.net/2021/09/04/6bojcOBzwPSiXvJ.png" src="https://i.loli.net/2021/09/04/6bojcOBzwPSiXvJ.png" alt="">
+        </div>
+      </div>
+
+      
+<script type="text/javascript">
+window.onload = function(){
+  var oBox=document.getElementsByClassName("box");
+  var oImg=document.getElementsByTagName('img');
+  var oBoxw=oBox[0].offsetWidth;
+  var cols=5;
+
+  loadImg(oImg);
+  window.onscroll = function(){
+    loadImg(oImg);
+  };
+
+  function waterfall(ele,col,eleWidth){
+    var hArr = [];
+    for(var i = 0;i < ele.length;i++){
+        if(i < col){
+            hArr.push(ele[i].offsetHeight);
+        }else{
+            //min不能用于数组，apply的第一个参数传递作用域，第二个参数传递数组。Math.min.apply(null, [1, 2, 3]) 等价于 Math.min(1, 2, 3)
+            var minH = Math.min.apply(null,hArr);
+            var index = hArr.indexOf(minH);
+            ele[i].style.position = 'absolute';   
+            ele[i].style.top = minH + 'px';           //ele.style.left/top 是有px的，而offsetHeight/offsetWidth是没有px的
+            ele[i].style.left = index * eleWidth + 'px';
+            hArr[index] += ele[i].offsetHeight;
+        }
+    }
+  }
+
+  function loadImg(arr){
+  for( var i = 0,len = arr.length; i < len; i++){
+    //判断图片相对应视图窗口的高度是否小于屏幕可视窗口大小
+    if(arr[i].getBoundingClientRect().top < document.documentElement.clientHeight && !arr[i].isLoad){  //判断图片
+      arr[i].isLoad = true;
+      if(arr[i].dataset){                    //判断是否存在HTML5的dataset对象
+        aftLoadImg(arr[i],arr[i].dataset.original);    
+      }else{
+        aftLoadImg(arr[i],arr[i].getAttribute("data-original"));
+      }
+      arr[i].style.cssText = "transition: opacity 4s; opacity: 1;"    //使opacity变化在4秒内完成
+    }
+  }
+}
+
+function aftLoadImg(obj,url){
+  obj.src = url;
+  waterfall(oBox,cols,oBoxw);   //需要再次调用瀑布流方法
+}
+}
+
+var title=document.getElementsByClassName('title');
+var para=document.getElementsByClassName('para');
+
+for(i0=0;i0<title.length;i0++) {
+    title[i0].style.animationDelay = (i0*0.1)+"s";
+}
+
+for(i1=0;i1<para.length;i1++) {
+    para[i1].style.animationDelay = (i1*0.1)+"s";
+}
+</script>
+</body>
+</html>
