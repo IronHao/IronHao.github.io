@@ -88,5 +88,20 @@
         "objectID": "posts/约瑟夫环的两种设计",
         "date": "2021-03-14T12:42:34.000Z",
         "draft": false
+    },
+    {
+        "title": "输入缓冲与土狼时间的实现|Unity2D学习日记（一）",
+        "uri": "posts/输入缓冲与土狼时间",
+        "content": "2D                                                C  Unity                 2D                                                                                                                                                                                                                                                                                                          Unity           Invoke                   InvokeRepeating                                                                                             yield return new WaitForSeconds                                                                                 private float timer         private float timer_max   2f                                  timer   timer_max              Update        timer    0    timer    Time deltaTime   timer                                                 Update       bufferjumpcounter   bufferjumpmax              Update        bufferjumpcounter    0    bufferjumpcounter    Time deltaTime   bufferjumpcounter  0 05f    hasJumpForce   false  buffercoyotecounter   0                  Update        buffercoyotecounter                        2                                Update         void CheckForJump      IsOnGround      rigidbody2D_Role velocity y  0 05f    hasJumpForce   false  buffercoyotecounter   buffercoyotemax                  Update        buffercoyotecounter    0    buffercoyotecounter    Time deltaTime   buffercoyotecounter",
+        "objectID": "posts/输入缓冲与土狼时间",
+        "date": "2021-09-13T14:16:40.000Z",
+        "draft": false,
+        "toc": true,
+        "image": null,
+        "tags": [
+            "Unity",
+            "游戏编程",
+            "个人游戏开发记录"
+        ]
     }
 ]
