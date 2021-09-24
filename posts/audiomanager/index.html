@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="利用脚本实现全局音效的控制|Unity2D学习日记（二）">
+<meta itemprop="description" content="引言 个人学习积累中，如有任何问题与错误，欢迎指出与讨论。 这系列将会记录我在搭建自己的2D平台游戏时遇到的一些问题与解决方案，核心目的均为更好"><meta itemprop="datePublished" content="2021-09-24T21:16:34&#43;08:00" />
+<meta itemprop="dateModified" content="2021-09-24T21:16:34&#43;08:00" />
+<meta itemprop="wordCount" content="2119">
+<meta itemprop="keywords" content="Unity,游戏编程,个人游戏开发记录," /><meta property="og:title" content="利用脚本实现全局音效的控制|Unity2D学习日记（二）" />
+<meta property="og:description" content="引言 个人学习积累中，如有任何问题与错误，欢迎指出与讨论。 这系列将会记录我在搭建自己的2D平台游戏时遇到的一些问题与解决方案，核心目的均为更好" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.ironhao.top/posts/audiomanager/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-09-24T21:16:34&#43;08:00" />
+<meta property="article:modified_time" content="2021-09-24T21:16:34&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="利用脚本实现全局音效的控制|Unity2D学习日记（二）"/>
+<meta name="twitter:description" content="引言 个人学习积累中，如有任何问题与错误，欢迎指出与讨论。 这系列将会记录我在搭建自己的2D平台游戏时遇到的一些问题与解决方案，核心目的均为更好"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>利用脚本实现全局音效的控制|Unity2D学习日记（二）</title>
+	<link rel="stylesheet" href="https://www.ironhao.top/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	<style type="text/css">@font-face{
+    font-family: 'Noto Sans CJK';
+    font-weight: 200;
+    font-style: normal;
+    font-stretch: normal;
+    font-display: swap;
+    src: url('https://www.ironhao.top/fonts/NotoSansCJK-Regular-1.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Thin-2.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Light-3.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-DemiLight-4.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Medium-5.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Bold-6.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Black-7.otf') format('opentype');
+       
+}</style>
+
+	<link rel="stylesheet" href="/css/search.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+
+	<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
+	<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
+
+
+ 	
+	<script src= "/js/search.js" type="text/javascript"></script>
+	
+</head>
+
+<body id="page">
+
+	
+	<a href="#ex1" rel="modal:open"><i class="fas fa-search fa-fw"></i></a>
+	
+	
+	
+	<header id="site-header" class="animated slideInUp">
+
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://www.ironhao.top/">IronHao</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://www.ironhao.top/posts/">Posts</a>
+				<a href="https://www.ironhao.top/pixelArt/">Pixel Art</a>
+				<a href="https://www.ironhao.top/about-hugo/">About</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://zjut_yangtiehao@outlook.com" target="_blank" rel="noopener me" title="Email"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a><a href="https://github.com/IronHao" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+
+		<ul>
+			<li><a href="https://www.ironhao.top/posts/">Posts</a></li>
+			<li><a href="https://www.ironhao.top/pixelArt/">Pixel Art</a></li>
+			<li><a href="https://www.ironhao.top/about-hugo/">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Sep 24, 2021</span></div>
+				<h1>利用脚本实现全局音效的控制|Unity2D学习日记（二）</h1>
+			</header>
+			<div class="content">
+				<h2 id="引言">引言<a href="#引言" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<blockquote>
+<p>个人学习积累中，如有任何问题与错误，欢迎指出与讨论。</p>
+</blockquote>
+<p>这系列将会记录我在搭建自己的2D平台游戏时遇到的一些问题与解决方案，核心目的均为<strong>更好的游戏体验与更棒的代码逻辑结构</strong>。<em>所有代码基于C#与Unity。</em></p>
+<h2 id="正文">正文<a href="#正文" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<blockquote>
+<p>恰到好处的音效能够为游戏提供更好的沉浸感。——鲁迅</p>
+</blockquote>
+<p>音效是游戏创造中的重要一环，恰到好处的音效，能够准确的告诉你，主角在“<strong>做什么</strong>”，又“<strong>遭受了什么</strong>”，为玩家提供足够的信息。但是如何管理是个问题。</p>
+<blockquote>
+<p>主角扛着几个大音响与数张“唱片”：受伤、跳跃、跑步、攻击&hellip;&hellip;与另一个扛着大音响和唱片的BOSS相遇。他们开启战斗，打着打着，要开启对应的音响，甚至可能还要根据自己的动作切换唱片。</p>
+</blockquote>
+<p>当然这并不是不行，正式游玩时又不会真的有个大音箱挂在主角身上。但当你调试修改代码时，看着Inspector栏里成堆的组件时，你也许会觉得，这并不是一个好办法。那么，有什么更好的解决方法吗？</p>
+<p>使用<strong>一个脚本实现全局管理</strong>，也许是个可行的方法。</p>
+<p>惯例，讲一点点的前置小知识。</p>
+<h3 id="component组件">Component|组件<a href="#component组件" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<blockquote>
+<p>游戏对象是 Unity Editor 中包含组件的对象。组件定义了该游戏对象的行为。——Unity手册</p>
+</blockquote>
+<p>组件是Unity中最重要的一块内容，脚本也可以作为组件挂载在物体上。我们需要知道的是，组件，也是可以通过脚本在物体上动态挂载（卸载）的。</p>
+<ul>
+<li><strong>加载方式</strong>：<code>组件类型 组件名 = gameobject.AddComponent&lt;组件类型&gt;();</code></li>
+<li><strong>卸载方式</strong>：<code>Destroy(组件名);</code></li>
+</ul>
+<p>所以，我们可以通过脚本控制音频，在需要播放的时候生成组件（<em>注：查阅网上资料，也有说动态加载对资源的消耗很大，谨慎使用？</em>），并在音乐播放完毕后删除组件。</p>
+<h3 id="枚举类与switch-case语句的组合">枚举类与Switch-case语句的组合<a href="#枚举类与switch-case语句的组合" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>这是我个人非常喜欢使用的一个组合，写出来的条例清晰，让人debug时心情愉悦（<em>并不</em>）。</p>
+<p>为什么要使用枚举类？</p>
+<p>通过枚举类来限制范围，配合代码自动补全，减少出错概率，同时，也提高代码的可读性（<em>只要你不瞎取名</em>）。另外，<strong>枚举类里的每个值，本质上是int，所以传入数组时，是以int类型存放的</strong>，也正是利用这个，我们可以实现与Switch-case语句的结合，如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">switch</span> <span class="p">(</span><span class="n">Enum</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">case</span> <span class="n">Enum</span><span class="p">.</span><span class="n">Name_1</span><span class="p">:</span>
+        <span class="cm">/* 内容 */</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">Enum</span><span class="p">.</span><span class="n">Name_2</span><span class="p">:</span>
+        <span class="cm">/* 内容 */</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">Enum</span><span class="p">.</span><span class="n">Name_3</span><span class="p">:</span>
+        <span class="cm">/* 内容 */</span>
+        <span class="k">break</span><span class="p">;</span>       
+<span class="p">}</span>
+    
+</code></pre></div><p>另外，由于为int值，还可以作为数组等的下标来处理，这方面就留给各位自行研究了。</p>
+<h3 id="audiomanager全局音乐管理类">AudioManager|全局音乐管理类<a href="#audiomanager全局音乐管理类" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>接下来写我们的脚本吧。为了方便其他脚本快速的调用该类里的内容，我们要使用静态（static）变量，并在一开始就赋值。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="cm">/* 无特殊说明，代码都在AudioManger类中 */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">AudioManager</span> <span class="n">instance</span><span class="p">;</span>
+
+<span class="k">private</span> <span class="k">void</span> <span class="n">Awake</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// 保证只有一个，丢弃后产生的
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">instance</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Destroy</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">instance</span> <span class="p">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="n">DontDestroyOnLoad</span><span class="p">(</span><span class="n">gameObject</span><span class="p">);</span>	<span class="c1">// 避免在场景切换时摧毁该脚本所挂载的物体
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>另外，我们还需要准备好唱片（AudioClip）。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="cm">/* 简单意思几个，节省篇幅~ */</span>
+<span class="cm">/* Header(&#34;在Inspector里的显示内容&#34;)，相当于注释；[SerializeField]用于在Inspector里可视化私有变量，方便赋值 */</span>
+<span class="na">[Header(&#34;背景音乐&#34;)]</span>
+<span class="na">[SerializeField]</span> <span class="k">private</span> <span class="n">AudioClip</span> <span class="n">musicClip</span><span class="p">;</span>	
+<span class="na">
+</span><span class="na">[Header(&#34;玩家音效&#34;)]</span>
+<span class="na">[SerializeField]</span> <span class="k">private</span> <span class="n">AudioClip</span> <span class="n">runClip_King</span><span class="p">;</span>
+</code></pre></div><p>在放歌前，我们还需要做好记录准备，不然局部变量一下子就跑不见了，再找就麻烦了。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AudioGroup</span><span class="p">&gt;</span> <span class="n">audioSource_Background</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AudioGroup</span><span class="p">&gt;();</span> 
+<span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AudioGroup</span><span class="p">&gt;</span> <span class="n">audioSource_King</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AudioGroup</span><span class="p">&gt;();</span>
+</code></pre></div><p>接着，我们要提供一个一键万能按钮。调用它后，会自动生成组件（音响，AudioSource）并播放音效，结束后，自动卸载组件。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="cm">/* MusicType为我们的枚举类，target表明对应的物体 */</span>
+<span class="k">public</span> <span class="k">void</span> <span class="n">PlayMusic</span><span class="p">(</span><span class="n">MusicType</span> <span class="n">musicType</span><span class="p">,</span> <span class="n">GameObject</span> <span class="n">target</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">AudioSource</span> <span class="n">tempS</span><span class="p">;</span>
+    <span class="n">AudioGroup</span> <span class="n">tempAG</span><span class="p">;</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">musicType</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="n">MusicType</span><span class="p">.</span><span class="n">Background</span><span class="p">:</span>
+            <span class="n">tempS</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">AudioSource</span><span class="p">&gt;();</span>
+            <span class="n">tempS</span><span class="p">.</span><span class="n">clip</span> <span class="p">=</span> <span class="n">musicClip</span><span class="p">;</span>
+            <span class="n">tempS</span><span class="p">.</span><span class="n">Play</span><span class="p">();</span>
+            <span class="n">tempS</span><span class="p">.</span><span class="n">loop</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>			<span class="c1">// 背景音乐要循环播放
+</span><span class="c1"></span>            <span class="n">tempS</span><span class="p">.</span><span class="n">volume</span> <span class="p">=</span> <span class="m">0.2f</span><span class="p">;</span>
+            <span class="n">tempAG</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AudioGroup</span><span class="p">(</span><span class="n">tempS</span><span class="p">,</span> <span class="n">target</span><span class="p">);</span>
+            <span class="n">audioSource_Background</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">tempAG</span><span class="p">);</span>
+            <span class="cm">/* 背景音乐不需要卸载，一直存在 */</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="n">MusicType</span><span class="p">.</span><span class="n">Run_King</span><span class="p">:</span>
+            <span class="n">tempS</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">AudioSource</span><span class="p">&gt;();</span>	<span class="c1">// 生成组件
+</span><span class="c1"></span>            <span class="n">tempS</span><span class="p">.</span><span class="n">clip</span> <span class="p">=</span> <span class="n">runClip_King</span><span class="p">;</span>	<span class="c1">// 确定唱片
+</span><span class="c1"></span>            <span class="n">tempS</span><span class="p">.</span><span class="n">volume</span> <span class="p">=</span> <span class="m">0.7f</span><span class="p">;</span>		<span class="c1">// 调整音量
+</span><span class="c1"></span>            <span class="n">tempS</span><span class="p">.</span><span class="n">Play</span><span class="p">();</span>				<span class="c1">// 播放
+</span><span class="c1"></span>            <span class="n">tempAG</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AudioGroup</span><span class="p">(</span><span class="n">tempS</span><span class="p">,</span> <span class="n">target</span><span class="p">);</span>
+            <span class="n">audioSource_King</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">tempAG</span><span class="p">);</span>
+            <span class="n">StartCoroutine</span><span class="p">(</span><span class="n">DeleteAudioAfterPlay</span><span class="p">(</span><span class="n">tempAG</span><span class="p">,</span> <span class="n">audioSource_King</span><span class="p">));</span>	<span class="c1">// 协程，具体见下
+</span><span class="c1"></span>            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* 等待音效播放完后自动卸载 */</span>
+<span class="n">IEnumerator</span> <span class="n">DeleteAudioAfterPlay</span><span class="p">(</span><span class="n">AudioGroup</span> <span class="n">ag</span><span class="p">,</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AudioGroup</span><span class="p">&gt;</span> <span class="n">agList</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">yield</span> <span class="k">return</span> <span class="k">new</span> <span class="n">WaitForSeconds</span><span class="p">(</span><span class="n">ag</span><span class="p">.</span><span class="n">audioSource</span><span class="p">.</span><span class="n">clip</span><span class="p">.</span><span class="n">length</span><span class="p">);</span>	<span class="c1">// length获取音频长度，WaitForSeconds(等待时间)
+</span><span class="c1"></span>    <span class="n">agList</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">ag</span><span class="p">);</span>
+    <span class="n">Destroy</span><span class="p">(</span><span class="n">ag</span><span class="p">.</span><span class="n">audioSource</span><span class="p">);</span>	<span class="c1">// 卸载组件
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>等等，这里是不是出现了什么奇怪的东西？AudioGroup是什么？</p>
+<p>这是我自己定义的一个类（<em>不太喜欢用结构</em>），主要考虑到这样的情况：有多个敌人开着音响，而根据已有的内容无法将敌人与音效一一对应（因为都绑定在AudioManager的物体上）。具体内容见下：（之后有需要，我们也可以扩充这个类的变量）</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="cm">/* 在AudioManager类之外 */</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">AudioGroup</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">AudioSource</span> <span class="n">audioSource</span><span class="p">;</span>		<span class="c1">// 音响
+</span><span class="c1"></span>    <span class="k">public</span> <span class="n">GameObject</span> <span class="n">target</span><span class="p">;</span>			<span class="c1">// 对应的物体
+</span><span class="c1"></span>    
+    <span class="cm">/* 构造函数，用于赋值 */</span>
+    <span class="k">public</span> <span class="n">AudioGroup</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">AudioGroup</span><span class="p">(</span><span class="n">AudioSource</span> <span class="n">audioS</span><span class="p">,</span> <span class="n">GameObject</span> <span class="n">t</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">audioSource</span> <span class="p">=</span> <span class="n">audioS</span><span class="p">;</span>
+        <span class="n">target</span> <span class="p">=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>最后，我们只要在合适的地方按这个万能按钮就行了~至于怎么调用，就看你们自己的想法了，写在对应执行的地方或者作为事件放在动画里都是可以的。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="cm">/* 在AudioManager类之外，额外写个函数是方便作为事件放在动画里。 */</span>
+<span class="k">void</span> <span class="n">RunAudio</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">AudioManager</span><span class="p">.</span><span class="n">instance</span><span class="p">.</span><span class="n">PlayMusic</span><span class="p">(</span><span class="n">MusicType</span><span class="p">.</span><span class="n">Run_King</span><span class="p">,</span> <span class="n">gameObject</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>当然，这种管理方式不仅限于音频管理，各位大可修改后用作其他方式的处理。</p>
+<h2 id="后记">后记<a href="#后记" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>这种全局管理的结构，个人相信应该不是最优解，也许在之后学习了更多知识后，会有进一步的优化。这篇文章，就当是提供一种思路吧。另外，我在学习本文相关内容时，借鉴了不少帖子、视频，包括但不限于：</p>
+<p><a href="https://www.bilibili.com/video/BV17E411Y7VN">Unity 2D教程:从独立游戏学习开发12: 音效控制(Audio Manager)——M_Studio</a></p>
+
+			</div>
+
+<div class="related-posts thin">
+	<h2></h2>
+	<ul>
+	
+	<li><a href="/posts/%E8%BE%93%E5%85%A5%E7%BC%93%E5%86%B2%E4%B8%8E%E5%9C%9F%E7%8B%BC%E6%97%B6%E9%97%B4/">输入缓冲与土狼时间的实现|Unity2D学习日记（一）</a></li>
+	
+	<li><a href="/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%BA%8C/">使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）</a></li>
+	
+	<li><a href="/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%B8%80/">Unity3D导入素材与搭建场景|Unity3D学习日记（一）</a></li>
+	
+	</ul>
+</div>
+
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://www.ironhao.top/tags/unity">Unity</a></span><span class="tag"><a href="https://www.ironhao.top/tags/%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B">游戏编程</a></span><span class="tag"><a href="https://www.ironhao.top/tags/%E4%B8%AA%E4%BA%BA%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E8%AE%B0%E5%BD%95">个人游戏开发记录</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2021-09-24 21:16 &#43;0800</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title"></div>
+			<nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#正文">正文</a>
+      <ul>
+        <li><a href="#component组件">Component|组件</a></li>
+        <li><a href="#枚举类与switch-case语句的组合">枚举类与Switch-case语句的组合</a></li>
+        <li><a href="#audiomanager全局音乐管理类">AudioManager|全局音乐管理类</a></li>
+      </ul>
+    </li>
+    <li><a href="#后记">后记</a></li>
+  </ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://www.ironhao.top/posts/%E8%BE%93%E5%85%A5%E7%BC%93%E5%86%B2%E4%B8%8E%E5%9C%9F%E7%8B%BC%E6%97%B6%E9%97%B4/">
+				<span class="post-nav-label">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>输入缓冲与土狼时间的实现|Unity2D学习日记（一）</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+
+<div id="vcomments"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<style type="text/css">
+input::input-placeholder{
+	color:#e8eef2;
+}
+input::-webkit-input-placeholder{	
+	color:#e8eef2;
+}
+input::-moz-placeholder{			
+	color: #e8eef2;
+}
+input::-moz-placeholder{		
+	color: #e8eef2;
+}
+input::-ms-input-placeholder{	
+	color: #e8eef2;
+}
+
+#veditor {
+	background-image: url(https://i.loli.net/2021/08/05/NhYp97G5jvCyc4t.gif);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: right;
+	background-color: rgb(255, 255, 255, 0);
+	resize: vertical
+}
+
+
+.vpower.txt-right {
+  display: none;
+}
+
+.v[data-class=v] .status-bar, .v[data-class=v] .veditor, .v[data-class=v] .vinput, .v[data-class=v] p, .v[data-class=v] pre code {
+    color: #e8eef2;
+}
+
+.v[data-class=v] .vbtn {
+    -webkit-transition-duration: .4s;
+    transition-duration: .4s;
+    text-align: center;
+    color: #e8eef2;
+    border: 1px solid #ededed;
+    border-radius: .3em;
+    display: inline-block;
+    background: transparent;
+    margin-bottom: 0;
+    font-weight: 400;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    white-space: nowrap;
+    padding: .5em 1.25em;
+    font-size: .875em;
+    line-height: 1.42857143;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+}
+
+.v[data-class=v] .vwrap .vheader .vinput {
+    width: 33.33%;
+    border-bottom: 1px dashed #e8eef2;
+}
+
+.v[data-class=v] .vicon {
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    fill: #e8eef2;
+    vertical-align: middle;
+}
+
+.v[data-class=v] .vempty {
+    padding: 1.25em;
+    text-align: center;
+    color: #e8eef2;
+    overflow: auto;
+}
+</style>
+
+<script type="text/javascript">
+  new Valine({
+      el: '#vcomments' ,
+      appId: 'cIScCqAIMjDgsPHfDw6RKWin-gzGzoHsz',
+      appKey: 'jv3B5h7m5849qtAKyOeYXCE1',
+      notify: 'false', 
+      verify: 'false', 
+      avatar:'mm', 
+      placeholder: '说点什么吧...',
+      visitor: 'true'
+  });
+</script></div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2021 <a href="https://www.ironhao.top/">IronHao</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://www.ironhao.top/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	
+
+	<script src="https://www.ironhao.top/js/bundle.min.7d8545daa55d62427355498dd8da13f98ff79a7938ce7d2a5e2ae1ec0de3beb8.js" integrity="sha256-fYVF2qVdYkJzVUmN2NoT+Y/3mnk4zn0qXirh7A3jvrg=" crossorigin="anonymous"></script>
+	
+
+
+   
+
+</body>
+
+</html>
