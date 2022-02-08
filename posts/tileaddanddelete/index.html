@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Tilemap里瓦块的动态添加与删除|Unity2D学习日记（三）">
+<meta itemprop="description" content="引言 个人学习积累中，如有任何问题与错误，欢迎指出与讨论。 这系列将会记录我在搭建自己的2D平台游戏时遇到的一些问题与解决方案，核心目的均为更好"><meta itemprop="datePublished" content="2022-02-08T23:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2022-02-08T23:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="4038">
+<meta itemprop="keywords" content="Unity,游戏编程,个人游戏开发记录," /><meta property="og:title" content="Tilemap里瓦块的动态添加与删除|Unity2D学习日记（三）" />
+<meta property="og:description" content="引言 个人学习积累中，如有任何问题与错误，欢迎指出与讨论。 这系列将会记录我在搭建自己的2D平台游戏时遇到的一些问题与解决方案，核心目的均为更好" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.ironhao.top/posts/tileaddanddelete/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-08T23:00:00&#43;08:00" />
+<meta property="article:modified_time" content="2022-02-08T23:00:00&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Tilemap里瓦块的动态添加与删除|Unity2D学习日记（三）"/>
+<meta name="twitter:description" content="引言 个人学习积累中，如有任何问题与错误，欢迎指出与讨论。 这系列将会记录我在搭建自己的2D平台游戏时遇到的一些问题与解决方案，核心目的均为更好"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Tilemap里瓦块的动态添加与删除|Unity2D学习日记（三）</title>
+	<link rel="stylesheet" href="https://www.ironhao.top/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	<style type="text/css">@font-face{
+    font-family: 'Noto Sans CJK';
+    font-weight: 200;
+    font-style: normal;
+    font-stretch: normal;
+    font-display: swap;
+    src: url('https://www.ironhao.top/fonts/NotoSansCJK-Regular-1.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Thin-2.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Light-3.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-DemiLight-4.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Medium-5.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Bold-6.otf') format('opentype'),
+         url('https://www.ironhao.top/fonts/NotoSansCJK-Black-7.otf') format('opentype');
+       
+}</style>
+
+	<link rel="stylesheet" href="/css/search.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+
+	<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
+	<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
+
+
+ 	
+	<script src= "/js/search.js" type="text/javascript"></script>
+	
+</head>
+
+<body id="page">
+
+	
+	<a href="#ex1" rel="modal:open"><i class="fas fa-search fa-fw"></i></a>
+	
+	
+	
+	<header id="site-header" class="animated slideInUp">
+
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://www.ironhao.top/">IronHao</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://www.ironhao.top/posts/">Posts</a>
+				<a href="https://www.ironhao.top/pixelArt/">Pixel Art</a>
+				<a href="https://www.ironhao.top/about-hugo/">About</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://zjut_yangtiehao@outlook.com" target="_blank" rel="noopener me" title="Email"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a><a href="https://github.com/IronHao" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+
+		<ul>
+			<li><a href="https://www.ironhao.top/posts/">Posts</a></li>
+			<li><a href="https://www.ironhao.top/pixelArt/">Pixel Art</a></li>
+			<li><a href="https://www.ironhao.top/about-hugo/">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Feb 8, 2022</span></div>
+				<h1>Tilemap里瓦块的动态添加与删除|Unity2D学习日记（三）</h1>
+			</header>
+			<div class="content">
+				<h2 id="引言">引言<a href="#引言" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<blockquote>
+<p>个人学习积累中，如有任何问题与错误，欢迎指出与讨论。</p>
+</blockquote>
+<p>这系列将会记录我在搭建自己的2D平台游戏时遇到的一些问题与解决方案，核心目的均为<strong>更好的游戏体验与更棒的代码逻辑结构</strong>。<em>所有代码基于C#与Unity。</em></p>
+<h2 id="正文">正文<a href="#正文" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<blockquote>
+<p><strong>Tilemap</strong> 组件是一个存储和处理<strong>瓦片资源</strong>以便创建 2D 关卡的系统。—— Unity Documentation</p>
+</blockquote>
+<p>使用网格构造关卡与处理机制极大地方便了我的游戏制作。但是网上关于Tilemap的教程多集中于编辑器上的可视化操作，对于在脚本中如何动态处理瓦块的内容，却很少提及，就算提及，也不是很全。结合我这一段时间的学习积累，我觉得，也是时候讲讲我是如何处理运用Tilemap的了。本文集中于<strong>代码动态处理</strong>上，偏资料整理向。</p>
+<h3 id="前置条件">前置条件<a href="#前置条件" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>光靠Unity自带的<code>2D Tilemap Editor</code>当然是不够的，我们还需要它的扩展包，<code>2D Tilemap Extras</code>，这个扩展包中提供了更多样的刷子与瓦块，方便一些功能的实现。我在这里集中使用<code>Rule Tile</code>为例。</p>
+<p>除此之外，我们还需要了解一些基本的类与方法。当然，详细的需要去找对应的文档。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">using</span> <span class="nn">UnityEngine.Tilemaps</span><span class="p">;</span>	<span class="c1">// 导入
+</span><span class="c1"></span>
+<span class="cm">/* 使用的类 */</span>
+<span class="k">public</span> <span class="n">RuleTile</span> <span class="n">tile_1</span><span class="p">;</span>	<span class="c1">// ruleTile对应的类，该类继承自TileBase，意味着它也可以使用父类的一些基本方法
+</span><span class="c1"></span><span class="k">public</span> <span class="n">Tilemap</span> <span class="n">tilemap_1</span><span class="p">;</span>	<span class="c1">// tilemap对应的类，该类继承自GridLayout，可以使用父类的一些基本方法
+</span><span class="c1"></span>
+<span class="cm">/* 放置与删除指定位置瓦块 */</span>
+<span class="n">tilemap_1</span><span class="p">.</span><span class="n">SetTile</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">tile_1</span><span class="p">);</span>	<span class="c1">// 将&#39;tile_1&#39;瓦块放置到&#39;tilemap_1&#39;瓦块地图的&#39;pos&#39;位置上
+</span><span class="c1"></span><span class="n">tilemap_1</span><span class="p">.</span><span class="n">SetTile</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span> 	<span class="c1">// 将tilemap_1&#39;瓦块地图的&#39;pos&#39;位置上的瓦块清空
+</span><span class="c1"></span>
+<span class="cm">/* 位置转换 */</span>
+<span class="n">Vector3Int</span> <span class="n">currentPos</span> <span class="p">=</span> <span class="n">tilemap_1</span><span class="p">.</span><span class="n">WorldToCell</span><span class="p">(</span><span class="n">worldPos</span><span class="p">)</span>	<span class="c1">// 将对应的&#39;worldPos&#39;世界坐标转换为对应的瓦块地图的坐标，为Vector3Int类型
+</span><span class="c1"></span>    
+<span class="cm">/* 获取位置上的瓦块 */</span>
+<span class="n">TileBase</span> <span class="n">tile_2</span> <span class="p">=</span> <span class="n">tilemap_1</span><span class="p">.</span><span class="n">GetTile</span><span class="p">(</span><span class="n">currentPos</span><span class="p">);</span>
+<span class="n">RuleTile</span> <span class="n">tile_3</span> <span class="p">=</span> <span class="n">tilemap_1</span><span class="p">.</span><span class="n">GetTile</span><span class="p">&lt;</span><span class="n">RuleTile</span><span class="p">&gt;(</span><span class="n">currentPos</span><span class="p">);</span>	<span class="c1">// 获取&#39;tilemap_1&#39;中某个单元格的给定&#39;currentPos&#39;位置处的&#39;tile of type RuleTile&#39;
+</span></code></pre></div><h3 id="运用--以方块增减为例">运用 | 以方块增减为例<a href="#运用--以方块增减为例" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>好了，既然你已经学会拧螺丝了，是时候造个飞机试试看了。嗯，好像是个不太好笑的笑话。</p>
+<p>无论如何，通过例子学习肯定是一个好办法。接下来，我会通过我项目中使用过的例子，介绍一些基本方法。</p>
+<p><em>需要再次明确的是，这些方法并不一定是最优解，我只能保证其能跑，但不保证效果。</em></p>
+<p>这会是一个详尽的例子，涉及Tilemap与Unity其他方法的结合运用，同时包括我自己思考完善机制的路线，方便大家体会研究。</p>
+<h4 id="基本功能实现">基本功能实现<a href="#基本功能实现" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<p>首先给出我们的需求（这是我在GGJ2022所制作的游戏**”胖还是瘦“**的核心玩法）：</p>
+<ul>
+<li>人物在瘦子状态可以吸收三个可变方块转变为胖子状态，同时也可以在胖子状态释放三个可变方块转变为瘦子状态。</li>
+<li>吸收释放方式为发射无碰撞体的子弹</li>
+<li>通过鼠标点击确认吸收释放的具体方块</li>
+<li>新释放的方块只能添加在原有方块的边上（即周围一圈）</li>
+<li>吸收的方块需要是连续的（就像你用一条连线勾选三个方块那样）</li>
+</ul>
+<p>我们在这里只考虑瓦块相关的问题，关于如何处理胖瘦状态，子弹如何发射、如何确认方向，如何确认碰撞点，我们就默认已经有完美解决方法了。</p>
+<p>首先我们看看如何添加释放方块。明确一下，我们所有的处理都会基于坐标数据，常用<code>List&lt;Vector3Int&gt;</code>来存储。</p>
+<p>由于释放与添加都需要在原有的可变方块基础上操作，我们首先获得原有的方块数组。这实际上就是一个找最大面积的问题，和LeetCode上的”<a href="https://leetcode-cn.com/problems/max-area-of-island/">695. 岛屿的最大面积</a>“是同样的思路。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="na">[SerializeField]</span> <span class="k">private</span> <span class="n">RuleTile</span> <span class="n">slimeTile</span><span class="p">;</span>	<span class="c1">// 对应的可变方块瓦块
+</span><span class="c1"></span><span class="na">[SerializeField]</span> <span class="k">private</span> <span class="n">Tilemap</span> <span class="n">slimeTilemap</span><span class="p">;</span>	<span class="c1">// 可变方块放置的瓦块地图
+</span><span class="c1"></span>
+<span class="c1">// 获得当前射击位置聚集在一起的可变方块的位置信息，结果存在result中
+</span><span class="c1"></span><span class="k">void</span> <span class="n">GetMaxTogetherSlimeTile</span><span class="p">(</span><span class="k">ref</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">result</span><span class="p">,</span> <span class="n">Vector3Int</span> <span class="n">currentPos</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">GetTile</span><span class="p">(</span><span class="n">currentPos</span><span class="p">)</span> <span class="p">!=</span> <span class="n">slimeTile</span> <span class="p">||</span> <span class="n">result</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">currentPos</span><span class="p">))</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">currentPos</span><span class="p">);</span>
+        <span class="n">GetMaxTogetherSlimeTile</span><span class="p">(</span><span class="k">ref</span> <span class="n">result</span><span class="p">,</span> <span class="n">currentPos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+        <span class="n">GetMaxTogetherSlimeTile</span><span class="p">(</span><span class="k">ref</span> <span class="n">result</span><span class="p">,</span> <span class="n">currentPos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+        <span class="n">GetMaxTogetherSlimeTile</span><span class="p">(</span><span class="k">ref</span> <span class="n">result</span><span class="p">,</span> <span class="n">currentPos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+        <span class="n">GetMaxTogetherSlimeTile</span><span class="p">(</span><span class="k">ref</span> <span class="n">result</span><span class="p">,</span> <span class="n">currentPos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 得到对应位置的瓦块类型
+</span><span class="c1"></span><span class="n">RuleTile</span> <span class="n">GetTile</span><span class="p">(</span><span class="n">Vector3Int</span> <span class="n">currentPos</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">RuleTile</span> <span class="n">ans</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+    <span class="n">Vector3Int</span> <span class="n">location</span> <span class="p">=</span> <span class="n">slimeTilemap</span><span class="p">.</span><span class="n">WorldToCell</span><span class="p">(</span><span class="n">currentPos</span><span class="p">);</span>
+    <span class="n">ans</span> <span class="p">=</span> <span class="n">slimeTilemap</span><span class="p">.</span><span class="n">GetTile</span><span class="p">&lt;</span><span class="n">RuleTile</span><span class="p">&gt;(</span><span class="n">location</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>当然这时候你可能会想，我们添加的时候可以选择的方块不是外圈上的嘛，那这怎么获得呢？想一想，可以通过在上面代码的基础上改哦。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">// 获得当前所有可以添加瓦块的位置，结果存在result中
+</span><span class="c1"></span><span class="k">void</span> <span class="n">GetCanAddEmptyTile</span><span class="p">(</span><span class="k">ref</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">result</span><span class="p">,</span> <span class="n">Vector3Int</span> <span class="n">currentPos</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">currentSlimeTile</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;();</span>
+    <span class="n">GetMaxTogetherSlimeTile</span><span class="p">(</span><span class="k">ref</span> <span class="n">currentSlimeTile</span><span class="p">,</span> <span class="n">currentPos</span><span class="p">);</span>	<span class="c1">// 先拿到已有的可变方块数组
+</span><span class="c1"></span>    <span class="c1">// 找它外圈的
+</span><span class="c1"></span>    <span class="k">foreach</span> <span class="p">(</span><span class="n">Vector3Int</span> <span class="n">pos</span> <span class="k">in</span> <span class="n">currentSlimeTile</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">IsCanAddTile</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">pos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)))</span>   
+            <span class="n">result</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">pos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+       	<span class="k">if</span> <span class="p">(</span><span class="n">IsCanAddTile</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">pos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)))</span>   
+           	<span class="n">result</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">pos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+       	<span class="k">if</span> <span class="p">(</span><span class="n">IsCanAddTile</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">pos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">)))</span>   
+            <span class="n">result</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">pos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">IsCanAddTile</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">pos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">)))</span>   
+            <span class="n">result</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">pos</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 检查该位置能否添加可变方块
+</span><span class="c1"></span><span class="kt">bool</span> <span class="n">IsCanAddTile</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">result</span><span class="p">,</span> <span class="n">Vector3Int</span> <span class="n">checkPos</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 不与已有的冲突且该位置上没有添加过瓦块就可以添加
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(!</span><span class="n">result</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">checkPos</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">GetTile</span><span class="p">(</span><span class="n">checkPos</span><span class="p">)</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>但这时候你又会想到，外圈就可能遇到各种问题，比如玩家、地面的瓦块刚好在这外圈上，这时候就不能允许在外圈对应的瓦块上进行修改。这怎么办呢？简单，额外判断一下就好。我们会在后面具体放置时候考虑。</p>
+<p>接下来我们就要开始进行放置和吸收操作了。</p>
+<p>首先我们考虑<strong>吸收（删除方块）</strong>。这里有几个关键点：</p>
+<ul>
+<li>鼠标获取对应位置并通过点击确认选择</li>
+<li>在完成之前，界面需要保持暂停，等待三个方块选择完毕</li>
+</ul>
+<p>第二个点，我们很容易就想到使用协程，通过<code>yield return</code>的语句来实现等待效果，第一个点，我们则可以通过Unity自带方法，获取鼠标在场景中的位置，并转换到瓦块地图上。至于点击，<code>Input.GetButton(&quot;Fire1&quot;)</code>即可。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="n">Vector3</span> <span class="n">mouseWorldPos</span> <span class="p">=</span> <span class="n">Camera</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">ScreenToWorldPoint</span><span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="n">mousePosition</span><span class="p">);</span> <span class="c1">// 获取鼠标位置
+</span><span class="c1"></span><span class="n">Vector3Int</span> <span class="n">pos</span> <span class="p">=</span> <span class="n">slimeTilemap</span><span class="p">.</span><span class="n">WorldToCell</span><span class="p">(</span><span class="n">mouseWorldPos</span><span class="p">);</span>	<span class="c1">// 转换
+</span></code></pre></div><p>平时，我们会将其封装成一个函数，放在Update里调用。但是，我们其实并不是每一帧都需要鼠标对应的位置，我们只在吸收/释放这个过程中，才需要获取。那么，有什么思路吗？用标识符，在update里if条件语句判断下，或者，直接在<strong>协程里处理每帧调用</strong>？</p>
+<p>后者能够获得清楚的代码逻辑，不至于把update里搞得乱乱的，也杜绝了不必要的外部接触。</p>
+<p>协程里的<code>Yield return null</code>其实就是表示暂缓一帧，在下一帧的时候再继续处理后续的代码，那么我们就可以利用它和<code>while</code>循环，构造简单的每帧调用。</p>
+<p>大致代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="cm">/* 协程里的代码 */</span>
+<span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 鼠标位置更新
+</span><span class="c1"></span>    <span class="n">Vector3</span> <span class="n">mouseWorldPos</span> <span class="p">=</span> <span class="n">Camera</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">ScreenToWorldPoint</span><span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="n">mousePosition</span><span class="p">);</span>
+    <span class="n">Vector3Int</span> <span class="n">pos</span> <span class="p">=</span> <span class="n">slimeTilemap</span><span class="p">.</span><span class="n">WorldToCell</span><span class="p">(</span><span class="n">mouseWorldPos</span><span class="p">);</span>
+    
+    <span class="c1">// 点击处理
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="n">GetButton</span><span class="p">(</span><span class="s">&#34;Fire1&#34;</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">slimeTiles</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">canRemoveTiles</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">pos</span><span class="p">))</span>
+    <span class="p">{</span>
+		<span class="cm">/* 在合适的时候Break跳出 */</span>
+    <span class="p">}</span>
+	
+	<span class="k">yield</span> <span class="k">return</span> <span class="k">null</span><span class="p">;</span>	<span class="c1">// 中断，下一帧继续
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>然后就是<strong>点击处理</strong>里的内容了，除了把当前位置的瓦块消除等基本操作外，还有一个关键点需要我们考虑，<strong>吸收的方块需要是连续的（就像你用一条连线勾选三个方块那样）</strong>，很明显，第一个方块是任意选择，从第二个方块开始，就要根据之前已选的进行判断了。仔细一想，后选的方块不也只能在已选的方块的四周吗，那这，不就是选择外圈的方块吗？！让我们来写一下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">posOfDeletedSilmeTile</span><span class="p">;</span>	<span class="c1">// 存储已选的方块的坐标数组
+</span><span class="c1"></span>
+<span class="c1">// 书接上回，就是上方点击处理的具体展示，一开始canRemoveTiles是当前射击位置获得的在一起的全部可变方块
+</span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="n">GetButton</span><span class="p">(</span><span class="s">&#34;Fire1&#34;</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">slimeTiles</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">canRemoveTiles</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">pos</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="c1">// 清空对应的瓦块和数据
+</span><span class="c1"></span>    <span class="n">slimeTilemap</span><span class="p">.</span><span class="n">SetTile</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+    <span class="n">slimeTiles</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+   	<span class="c1">// 已选方块添加记录
+</span><span class="c1"></span>    <span class="n">posOfDeletedSilmeTile</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+    <span class="n">nrOfRemoveDone</span><span class="p">++;</span>
+    <span class="c1">// 更新下一次可选的可变方块
+</span><span class="c1"></span>    <span class="n">canRemoveTiles</span> <span class="p">=</span> <span class="n">GetCanRemoveSlimeTile</span><span class="p">(</span><span class="n">slimeTiles</span><span class="p">);</span>
+    <span class="c1">// 在合适的时候跳出，这里’nrOfRemove = 3‘
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">nrOfRemoveDone</span> <span class="p">&gt;=</span> <span class="n">nrOfRemove</span><span class="p">)</span>
+        <span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 基于目前已删除的可变方块，获取当前可删除可变方块
+</span><span class="c1"></span><span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">GetCanRemoveSlimeTile</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">slimeTile</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;();</span>
+    <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">neighbourTiles</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;();</span>
+    <span class="c1">// 先获取所有已经删除瓦块的邻居
+</span><span class="c1"></span>    <span class="k">foreach</span><span class="p">(</span><span class="n">Vector3Int</span> <span class="n">hasRemovedOne</span> <span class="k">in</span> <span class="n">posOfDeletedSilmeTile</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">neighbourTiles</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">hasRemovedOne</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">)))</span>
+            <span class="n">neighbourTiles</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">hasRemovedOne</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">neighbourTiles</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">hasRemovedOne</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">)))</span>
+            <span class="n">neighbourTiles</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">hasRemovedOne</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">neighbourTiles</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">hasRemovedOne</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)))</span>
+            <span class="n">neighbourTiles</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">hasRemovedOne</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">neighbourTiles</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">hasRemovedOne</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)))</span>
+            <span class="n">neighbourTiles</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">hasRemovedOne</span> <span class="p">+</span> <span class="k">new</span> <span class="n">Vector3Int</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="c1">// 找到既是邻居又是原先瓦块的，就是可以删除的
+</span><span class="c1"></span>    <span class="k">foreach</span><span class="p">(</span><span class="n">Vector3Int</span> <span class="n">neighbourOne</span> <span class="k">in</span> <span class="n">neighbourTiles</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">slimeTile</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">neighbourOne</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">result</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">neighbourOne</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>那这样吸收就解决啦。接下来我们考虑放置。大部分操作是一样的，鼠标选择添加，已有可变方块外围的方块数据我们在之前也给出了获得的方法。不过，还记得我们说过存在的问题吗，<strong>”比如玩家、地面的瓦块刚好在这外圈上，这时候就不能允许在外圈对应的瓦块上进行修改“</strong>。这里我以玩家所处位置为例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="cm">/* 障碍物所处的方块位置信息数组 */</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;</span> <span class="n">barrierStayTiles</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3Int</span><span class="p">&gt;();</span>
+<span class="c1">// 根据碰撞体的数据，得到碰撞体四个角对应的瓦块位置信息并添加到数组中
+</span><span class="c1"></span><span class="n">BoxCollider2D</span> <span class="n">playerBoxCollider</span> <span class="p">=</span> <span class="n">player</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">BoxCollider2D</span><span class="p">&gt;();</span>
+
+<span class="n">barrierStayTiles</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">slimeTilemap</span><span class="p">.</span><span class="n">WorldToCell</span><span class="p">(</span><span class="k">new</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="p">+</span> <span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">extents</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="p">-</span> <span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">extents</span><span class="p">.</span><span class="n">y</span><span class="p">)));</span>
+
+<span class="n">barrierStayTiles</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">slimeTilemap</span><span class="p">.</span><span class="n">WorldToCell</span><span class="p">(</span><span class="k">new</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="p">-</span> <span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">extents</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="p">-</span> <span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">extents</span><span class="p">.</span><span class="n">y</span><span class="p">)));</span>
+
+<span class="n">barrierStayTiles</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">slimeTilemap</span><span class="p">.</span><span class="n">WorldToCell</span><span class="p">(</span><span class="k">new</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="p">+</span> <span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">extents</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="p">+</span> <span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">extents</span><span class="p">.</span><span class="n">y</span><span class="p">)));</span>
+
+<span class="n">barrierStayTiles</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">slimeTilemap</span><span class="p">.</span><span class="n">WorldToCell</span><span class="p">(</span><span class="k">new</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="p">-</span> <span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">extents</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="p">+</span> <span class="n">playerBoxCollider</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">extents</span><span class="p">.</span><span class="n">y</span><span class="p">)));</span>
+</code></pre></div><p>获得对应的信息后，我们只需要在鼠标点击判断的时候添加一个判断语句<code>!barrierStayTiles.Contains(pos)</code>即可。</p>
+<p>到此为止，需求所要的基本功能已经实现。</p>
+<h4 id="进一步完善美化">进一步完善美化<a href="#进一步完善美化" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<p>当然我们不可能仅满足于此，这个游戏还太”硬核“了，对玩家不够友好，缺少UI提示，打个比方，玩家怎么知道，他当前选择的方块能不能添加呢，甚至是，玩家怎么知道他当前选择了那个方块呢，鼠标移上去又没有变化。</p>
+<p>所以我们还需要使用tilemap去添加一些简易的交互提示。这里以<strong>实现鼠标移动到的瓦块会有一个选择外框</strong>为例。</p>
+<p>我们首先需要一个外框的瓦块图片，然后，我们要创建一个新的Tilemap，放在原有Tilemap之上[通过修改<code>Tilemap Renderer</code>组件的<code>Sorting Layer</code>或者<code>Order in Layer</code>(如果他们在同一个图层上)来实现]。</p>
+<p><em>PS: <code>Tilemap</code>组件有<code>Color</code>一栏，所以有别的效果别忘了这个哦，比如改颜色、透明度等</em></p>
+<p>接着，我们就可以开始写代码了。别忘了，之前我们已经可以实现每帧调用更新鼠标位置了，我们只要在原有基础上进一步完善即可。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="na">[SerializeField]</span> <span class="k">private</span> <span class="n">Tilemap</span> <span class="n">cursorTilemap</span><span class="p">;</span>	<span class="c1">// 外框所在的Tilemap
+</span><span class="c1"></span><span class="na">[SerializeField]</span> <span class="k">private</span> <span class="n">RuleTile</span> <span class="n">frameTile</span><span class="p">;</span>	<span class="c1">// 外框的RuleTile
+</span><span class="c1"></span>
+<span class="c1">// 更新框的位置，很简单，清空Tilemap，然后指定位置放一块即可
+</span><span class="c1"></span><span class="k">void</span> <span class="n">UpdataFrameTile</span><span class="p">(</span><span class="n">Vector3Int</span> <span class="n">currentPos</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cursorTilemap</span><span class="p">.</span><span class="n">ClearAllTiles</span><span class="p">();</span>
+    <span class="n">cursorTilemap</span><span class="p">.</span><span class="n">SetTile</span><span class="p">(</span><span class="n">currentPos</span><span class="p">,</span> <span class="n">frameTile</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* 在对应的位置调用方法 */</span>
+<span class="p">...</span>
+<span class="n">Vector3</span> <span class="n">mouseWorldPos</span> <span class="p">=</span> <span class="n">Camera</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">ScreenToWorldPoint</span><span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="n">mousePosition</span><span class="p">);</span>
+<span class="n">Vector3Int</span> <span class="n">pos</span> <span class="p">=</span> <span class="n">slimeTilemap</span><span class="p">.</span><span class="n">WorldToCell</span><span class="p">(</span><span class="n">mouseWorldPos</span><span class="p">);</span>
+<span class="n">UpdataFrameTile</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+<span class="p">...</span>
+</code></pre></div><p>是不是觉得很简单？原有框架搭好了，在其基础上更改就是这样方便。</p>
+<h4 id="小结">小结<a href="#小结" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<p>到此为止，该例子就已展示完毕，碍于篇幅，只展示了一些关键代码，如果觉得太过模糊，可以去<a href="https://www.gmhub.com/game/404">这里</a>下载当时GGJ上传的文件，里面包含完整的项目文件，关键代码在<code>CursorController.cs</code>里，子弹碰撞之类的在<code>BulletContoller.cs</code>里。</p>
+<h2 id="后记">后记<a href="#后记" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>到此为止，本篇就结束了，看着蛮长，其实用来用去也就涉及到了Tilemap里一点点的功能，希望对大家有所帮助。靠着他人提供的轮子，结合一些简单的算法，我们也能很快地完成一个不错的游戏机制。下一篇，我们会就Tilemap的持久化数据存储展开讨论（<del>希望自己不咕吧</del>）。</p>
+<p>顺便也纪念下自己第一次参加Game jam类型的活动。</p>
+<p>同样，我在学习本文相关内容时，借鉴了不少帖子、视频，包括但不限于：</p>
+<p><a href="https://www.youtube.com/watch?v=zABMvbTyEK8&amp;list=PL2vxeJx7wGYE9TkNOTlZJQ4NRqRevPw3h&amp;index=5">Unity: Set Get and Detect tiles in tilemaps! —— Pxl Dev</a></p>
+
+			</div>
+
+<div class="related-posts thin">
+	<h2></h2>
+	<ul>
+	
+	<li><a href="/posts/audiomanager/">利用脚本实现全局音效的控制|Unity2D学习日记（二）</a></li>
+	
+	<li><a href="/posts/%E8%BE%93%E5%85%A5%E7%BC%93%E5%86%B2%E4%B8%8E%E5%9C%9F%E7%8B%BC%E6%97%B6%E9%97%B4/">输入缓冲与土狼时间的实现|Unity2D学习日记（一）</a></li>
+	
+	<li><a href="/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%BA%8C/">使用Polybrush更快更方便地搭建场景|Unity3D学习日记（二）</a></li>
+	
+	<li><a href="/posts/unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0%E4%B8%80/">Unity3D导入素材与搭建场景|Unity3D学习日记（一）</a></li>
+	
+	</ul>
+</div>
+
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://www.ironhao.top/tags/unity">Unity</a></span><span class="tag"><a href="https://www.ironhao.top/tags/%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B">游戏编程</a></span><span class="tag"><a href="https://www.ironhao.top/tags/%E4%B8%AA%E4%BA%BA%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E8%AE%B0%E5%BD%95">个人游戏开发记录</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2022-02-08 23:00 &#43;0800</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title"></div>
+			<nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#正文">正文</a>
+      <ul>
+        <li><a href="#前置条件">前置条件</a></li>
+        <li><a href="#运用--以方块增减为例">运用 | 以方块增减为例</a></li>
+      </ul>
+    </li>
+    <li><a href="#后记">后记</a></li>
+  </ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://www.ironhao.top/posts/audiomanager/">
+				<span class="post-nav-label">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>利用脚本实现全局音效的控制|Unity2D学习日记（二）</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+
+<div id="vcomments"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<style type="text/css">
+input::input-placeholder{
+	color:#e8eef2;
+}
+input::-webkit-input-placeholder{	
+	color:#e8eef2;
+}
+input::-moz-placeholder{			
+	color: #e8eef2;
+}
+input::-moz-placeholder{		
+	color: #e8eef2;
+}
+input::-ms-input-placeholder{	
+	color: #e8eef2;
+}
+
+#veditor {
+	background-image: url(https://i.loli.net/2021/08/05/NhYp97G5jvCyc4t.gif);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: right;
+	background-color: rgb(255, 255, 255, 0);
+	resize: vertical
+}
+
+
+.vpower.txt-right {
+  display: none;
+}
+
+.v[data-class=v] .status-bar, .v[data-class=v] .veditor, .v[data-class=v] .vinput, .v[data-class=v] p, .v[data-class=v] pre code {
+    color: #e8eef2;
+}
+
+.v[data-class=v] .vbtn {
+    -webkit-transition-duration: .4s;
+    transition-duration: .4s;
+    text-align: center;
+    color: #e8eef2;
+    border: 1px solid #ededed;
+    border-radius: .3em;
+    display: inline-block;
+    background: transparent;
+    margin-bottom: 0;
+    font-weight: 400;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    white-space: nowrap;
+    padding: .5em 1.25em;
+    font-size: .875em;
+    line-height: 1.42857143;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+}
+
+.v[data-class=v] .vwrap .vheader .vinput {
+    width: 33.33%;
+    border-bottom: 1px dashed #e8eef2;
+}
+
+.v[data-class=v] .vicon {
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    fill: #e8eef2;
+    vertical-align: middle;
+}
+
+.v[data-class=v] .vempty {
+    padding: 1.25em;
+    text-align: center;
+    color: #e8eef2;
+    overflow: auto;
+}
+</style>
+
+<script type="text/javascript">
+  new Valine({
+      el: '#vcomments' ,
+      appId: 'cIScCqAIMjDgsPHfDw6RKWin-gzGzoHsz',
+      appKey: 'jv3B5h7m5849qtAKyOeYXCE1',
+      notify: 'false', 
+      verify: 'false', 
+      avatar:'mm', 
+      placeholder: '说点什么吧...',
+      visitor: 'true'
+  });
+</script></div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2022 <a href="https://www.ironhao.top/">IronHao</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://www.ironhao.top/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	
+
+	<script src="https://www.ironhao.top/js/bundle.min.7d8545daa55d62427355498dd8da13f98ff79a7938ce7d2a5e2ae1ec0de3beb8.js" integrity="sha256-fYVF2qVdYkJzVUmN2NoT+Y/3mnk4zn0qXirh7A3jvrg=" crossorigin="anonymous"></script>
+	
+
+
+   
+
+</body>
+
+</html>
