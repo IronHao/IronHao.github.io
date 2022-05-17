@@ -6,8 +6,299 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-cn</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Tue, 08 Feb 2022 23:00:00 +0800</lastBuildDate>
+		<lastBuildDate>Tue, 17 May 2022 18:21:17 +0800</lastBuildDate>
 		<atom:link href="https://www.ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Union-Find问题的解决与方案迭代|Algorithms, Part1|第一周</title>
+			<link>https://www.ironhao.top/posts/union_find/</link>
+			<pubDate>Tue, 17 May 2022 18:21:17 +0800</pubDate>
+			
+			<guid>https://www.ironhao.top/posts/union_find/</guid>
+			<description>引言 记录一下刷Coursera上《Algorithms, Part1》课程的所学内容。主要包括复现一些课上经典的数据结构与算法（C++），以及</description>
+			<content type="html"><![CDATA[<h1 id="引言">引言</h1>
+<p>记录一下刷Coursera上《Algorithms, Part1》课程的所学内容。主要包括复现一些课上经典的数据结构与算法（C++），以及每周课程作业的部分（Java）。如有错误之处，欢迎纠正。</p>
+<h1 id="正文">正文</h1>
+<h2 id="课程内容">课程内容</h2>
+<p>这周分为两块，一部分为算法课程总的介绍，另一部分则是Union-Find的内容。</p>
+<p>课程介绍的部分就不再赘述。我们主要来看看Union-Find的部分。</p>
+<p>不过在此之前，我们要知道，算法的目的是为了高效解决问题。我们根据问题情况建立模型，然后找到一种速度尽可能快，消耗内存尽可能少的算法去解决。当然这不可能是一蹴而就的。我们需要不断迭代算法，直到满足需求。接下来的Union-Find就是一个贯彻这一思想的案例。</p>
+<h3 id="union-find">Union-Find</h3>
+<p>实质就是一个动态连通性的问题，判断两个点之间是否能连通。动态就体现我们可以动态地连接两个点（当然应该也能断开两个点的连接，但是在这里为了简化问题，没有考虑）。于是根据这个问题，我们需要设计一个数据结构来保存程序已知的所有整数对的足够多的信息，并用他们来判断一对新对象是否是相连的。</p>
+<p>这个数据结构应该包含以下的几个基本方法：</p>
+<ul>
+<li><code>void unionNode(int node1, int node2)</code>：连接两个结点。如果已经连接了，就不再做任何操作。</li>
+<li><code>int find(int node)</code>：返回该结点的根节点（或者说组号）。</li>
+<li><code>int count()</code>：返回组数。</li>
+<li><code>bool isConnected(int node1, int node2)</code>：判断两个点是否连接。</li>
+</ul>
+<h4 id="方案一---quick-find">方案一 |  Quick-Find</h4>
+<p>我们使用一个数组来记录它的根结点（或者可以理解为它的组号），只要组号相同，就说明点是连通的。所以我们核心就是<strong>维护这个记录根结点的数组</strong>。当然为了记录组数，我们还需要维护一个组数的变量。</p>
+<p><img src="https://s2.loli.net/2022/05/15/ke7ib2xpufKzvGa.png" alt=""></p>
+<p>所以我们对于这几个基本方法的实现思路如下：</p>
+<ul>
+<li><code>void unionNode(int node1, int node2)</code>：判断两个结点的根结点是否一致，一致表示已连接，不用再做操作，否则就遍历根结点数组，让<code>node1</code>同组的根节点都变成<code>node2</code>的根节点。同时连接后，组数减一，所以别忘了组数的变量。</li>
+<li><code>int find(int node)</code>：返回根结点数组的对应值即可。</li>
+<li><code>int count()</code>：返回表示组数的变量即可。</li>
+<li><code>bool isConnected(int node1, int node2)</code>：判断两个点是否连接只需要判断他们根结点（组号）是否一致，一致就是连接，反之不是。</li>
+</ul>
+<p>除此之外，还加了<code>void Show()</code>这个方法，方便测试调用查看结果。</p>
+<p>实现代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* Use the quick-find method */</span>
+<span class="k">class</span> <span class="nc">QuickFindUF</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">_root</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_count</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="nf">length</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">arr</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_msize</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">arr</span><span class="p">);</span> <span class="p">}</span>
+
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">QuickFindUF</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_root</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+        <span class="c1">// Init, the root is itself.
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">_root</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">_count</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="n">QuickFindUF</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">_root</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Check whether these nodes are connected */</span> 
+    <span class="kt">bool</span> <span class="nf">isConnected</span><span class="p">(</span><span class="kt">int</span> <span class="n">node1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">node2</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">node1</span><span class="p">)</span> <span class="o">==</span> <span class="n">find</span><span class="p">(</span><span class="n">node2</span><span class="p">);</span> <span class="p">}</span>
+
+    <span class="cm">/* Union the node1 and node2, let all node&#39;s root is same as node1_root to node2_root */</span>
+    <span class="kt">void</span> <span class="nf">unionNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">node1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">node2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">node1_root</span> <span class="o">=</span> <span class="n">_root</span><span class="p">[</span><span class="n">node1</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">node2_root</span> <span class="o">=</span> <span class="n">_root</span><span class="p">[</span><span class="n">node2</span><span class="p">];</span>
+        <span class="c1">// Same root, already connect, no need to do anything
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">node1_root</span> <span class="o">==</span> <span class="n">node2_root</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="c1">// Connect
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">_root</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">_root</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">node1_root</span><span class="p">)</span>
+                <span class="n">_root</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">node2_root</span><span class="p">;</span>
+        <span class="n">_count</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Return the identification(root) of the specific node */</span>
+    <span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">)</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">_root</span><span class="p">[</span><span class="n">node</span><span class="p">];</span> <span class="p">}</span>
+
+    <span class="cm">/* Return the number of connected component */</span> 
+    <span class="kt">int</span> <span class="nf">count</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_count</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="cm">/* Show the nubmer of nodes, the number of connected component and the &#34;nodes -&gt; it&#39;s root&#34; */</span>
+    <span class="kt">void</span> <span class="nf">show</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">_root</span><span class="p">);</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The nodes number: &#34;</span> <span class="o">+</span> <span class="n">to_string</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The connected components number: &#34;</span> <span class="o">+</span> <span class="n">to_string</span><span class="p">(</span><span class="n">count</span><span class="p">())</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Node</span><span class="se">\t</span><span class="s"> -&gt; it&#39;s root&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s"> -&gt; &#34;</span> <span class="o">+</span> <span class="n">to_string</span><span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><p>这个算法的问题就在于，每次<code>unionNode()</code>时，如果要连接，那就需要遍历整个数组。如果每次都要连接，那么时间开销将会是$O(n^2)$级别的。这是我们不能接受的。</p>
+<h4 id="方案二--quick-union">方案二 | Quick-Union</h4>
+<p>于是我们提出了方案二，这次我们<strong>不直接指向根节点，而是指向它的父结点，即从叶子开始，构造了一棵树</strong>。而如何判断是根节点呢，只要它的父亲指向它本身即可。</p>
+<p>所以我们对于这几个基本方法的实现思路如下：</p>
+<ul>
+<li><code>void unionNode(int node1, int node2)</code>：判断两个结点的根结点是否一致，一致表示已连接，不用再做操作，否则就让<code>node1</code>的树作为子树并入到<code>node2</code>的树中，即让<code>node1</code>的根结点的父亲指向<code>node2</code>的根结点。</li>
+<li><code>int find(int node)</code>：返回根结点数组的对应值即可。</li>
+<li><code>int count()</code>：返回表示组数的变量即可。</li>
+<li><code>bool isConnected(int node1, int node2)</code>：与方案一一样，判断两个点是否连接只需要判断他们根节点（组号）是否一致，一致就是连接，反之不是。</li>
+</ul>
+<p>另外，在这边我还添加了一个<code>int depth(int node)</code>的函数，返回<code>node</code>结点所对应的深度，方便最后在<code>show</code>函数里显示树最大的深度（这个与我们判断时遍历的最坏情况息息相关）。</p>
+<p>实现代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* Use the quick-union method */</span>
+<span class="k">class</span> <span class="nc">QuickUnionUF</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">_parent</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_count</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="nf">length</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">arr</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_msize</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">arr</span><span class="p">);</span> <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="nf">depth</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">dp</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">_parent</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">!=</span> <span class="n">node</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">_parent</span><span class="p">[</span><span class="n">node</span><span class="p">];</span>
+            <span class="n">dp</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">QuickUnionUF</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_parent</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+        <span class="c1">// Init, the parent is itself.
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">_parent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">_count</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="n">QuickUnionUF</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">_parent</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Check whether these nodes are connected */</span> 
+    <span class="kt">bool</span> <span class="nf">isConnected</span><span class="p">(</span><span class="kt">int</span> <span class="n">node1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">node2</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">node1</span><span class="p">)</span> <span class="o">==</span> <span class="n">find</span><span class="p">(</span><span class="n">node2</span><span class="p">);</span> <span class="p">}</span>
+
+    <span class="cm">/* Union the node1 and node2, let node1_root&#39;s parent to node2_root */</span>
+    <span class="kt">void</span> <span class="nf">unionNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">node1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">node2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">node1_root</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">node1</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">node2_root</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">node2</span><span class="p">);</span>
+        <span class="c1">// Same root, already connect, no need to do anything
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">node1_root</span> <span class="o">==</span> <span class="n">node2_root</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="c1">// Connect, let node1 be the subtree of the node2
+</span><span class="c1"></span>        <span class="n">_parent</span><span class="p">[</span><span class="n">node1_root</span><span class="p">]</span> <span class="o">=</span> <span class="n">node2_root</span><span class="p">;</span>
+        <span class="n">_count</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Return the identification(root) of the specific node */</span>
+    <span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">)</span>  
+    <span class="p">{</span>
+        <span class="c1">// To find the root, which parent is itself.
+</span><span class="c1"></span>        <span class="k">while</span> <span class="p">(</span><span class="n">_parent</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">!=</span> <span class="n">node</span><span class="p">)</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">_parent</span><span class="p">[</span><span class="n">node</span><span class="p">];</span>
+        <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Return the number of connected component */</span> 
+    <span class="kt">int</span> <span class="nf">count</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_count</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="cm">/* Show the nubmer of nodes, the number of connected component, the depth and the &#34;nodes -&gt; it&#39;s root&#34; */</span>
+    <span class="kt">void</span> <span class="nf">show</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">_parent</span><span class="p">);</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The nodes number: &#34;</span> <span class="o">+</span> <span class="n">to_string</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The connected components number: &#34;</span> <span class="o">+</span> <span class="n">to_string</span><span class="p">(</span><span class="n">count</span><span class="p">())</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">dp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">tempD</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">tempD</span> <span class="o">=</span> <span class="n">depth</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tempD</span> <span class="o">&gt;</span> <span class="n">dp</span><span class="p">)</span>
+                <span class="n">dp</span> <span class="o">=</span> <span class="n">tempD</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The depth: &#34;</span> <span class="o">+</span> <span class="n">to_string</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Node</span><span class="se">\t</span><span class="s"> -&gt; it&#39;s root&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s"> -&gt; &#34;</span> <span class="o">+</span> <span class="n">to_string</span><span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><p>这样我们每次连接的时候，也只需要执行一步操作了，不需要再整个数组遍历过来。但是我们增加了<code>find()</code>的消耗，同时由于<code>unionNode()</code>里我们也需要使用<code>find()</code>去找根节点。这个方法还是不行。</p>
+<p>那么关键在哪？考虑下最坏情况，一颗没有分叉的树，父子都是一对一的，如果从叶子出发，那就需要n次遍历，才能找到根节点。所以我们要想办法缩短这个距离，即让树的高度尽可能的小。</p>
+<h4 id="方案三--weighted-quick-union">方案三 | Weighted-Quick-Union</h4>
+<p>在这个方案里，我们在连接树的时候，<strong>将树里结点的数量作为权重，越多权重越大</strong>，我们让小权重（结点少）的树作为大权重（结点多）的树的子数。从而保证树的高度尽可能的少，减少<code>find()</code>遍历的次数。<em>（关于结点数与树高度的关系，可以从想象从零开始连接独立的结点，构造这棵树出发。）</em></p>
+<p><img src="https://s2.loli.net/2022/05/15/13s54HD8WozSaBw.png" style="zoom: 80%;" /></p>
+<p>所以我们对于这几个基本方法的实现思路如下：（其他与方案二保持一致的就不再重复）</p>
+<ul>
+<li><code>void unionNode(int node1, int node2)</code>：判断两个结点的根结点是否一致，一致表示已连接，不用再做操作，否则就判断两个结点的让<code>node1</code>的树作为子树并入到<code>node2</code>的树中，即让<code>node1</code>的根结点的父亲指向<code>node2</code>的根结点。</li>
+</ul>
+<p>实现代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/*为了减少内容，这边只把与方案二有区别的部分放上来*/</span>
+
+<span class="cm">/* Use the weighted-quick-union method */</span>
+<span class="k">class</span> <span class="nc">WeightedQuickUnionUF</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">_size</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">WeightedQuickUnionUF</span><span class="p">(</span><span class="kt">int</span> <span class="n">nrOfNode</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_parent</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">nrOfNode</span><span class="p">];</span>
+        <span class="n">_size</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">nrOfNode</span><span class="p">];</span>
+        <span class="c1">// Init, the parent is itself ans size is one(only itself).
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nrOfNode</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_parent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="n">_size</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+            
+        <span class="n">_count</span> <span class="o">=</span> <span class="n">nrOfNode</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="cm">/* Union the node1 and node2, let smaller size node root&#39;s parent to larger size node root */</span>
+    <span class="kt">void</span> <span class="nf">unionNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">node1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">node2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">node1_root</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">node1</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">node2_root</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">node2</span><span class="p">);</span>
+        <span class="c1">// Same root, already connect, no need to do anything
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">node1_root</span> <span class="o">==</span> <span class="n">node2_root</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="c1">// Connect, let the smaller tree be the subtree of the larger tree
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">_size</span><span class="p">[</span><span class="n">node1_root</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">_size</span><span class="p">[</span><span class="n">node2_root</span><span class="p">])</span>
+        <span class="p">{</span>
+            <span class="n">_parent</span><span class="p">[</span><span class="n">node1_root</span><span class="p">]</span> <span class="o">=</span> <span class="n">node2_root</span><span class="p">;</span>
+            <span class="n">_size</span><span class="p">[</span><span class="n">node2_root</span><span class="p">]</span> <span class="o">+=</span> <span class="n">_size</span><span class="p">[</span><span class="n">node1_root</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">_parent</span><span class="p">[</span><span class="n">node2_root</span><span class="p">]</span> <span class="o">=</span> <span class="n">node1_root</span><span class="p">;</span>
+            <span class="n">_size</span><span class="p">[</span><span class="n">node1_root</span><span class="p">]</span> <span class="o">+=</span> <span class="n">_size</span><span class="p">[</span><span class="n">node2_root</span><span class="p">];</span>
+        <span class="p">}</span>
+            
+        <span class="n">_count</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>这样我们就可以缩减每次<code>find()</code>所需要的时间了，从$O(n)$变为$O(logN)$，但是，有没有可能实现常数级别的查找呢？</p>
+<h4 id="方案四--path-compressed-weighted-quick-union">方案四 | Path-Compressed-Weighted-Quick-Union</h4>
+<p>我们可以尝试把路径再一次的压缩，让每次尽可能一次就找到，即让每个结点都直接指向对应树的根结点，同时又不增加过多的额外操作。我们可以<strong>在检查结点的同时将它们直接连接到根结点</strong>。</p>
+<p>所以我们对于这几个基本方法的实现思路如下：（其他与方案三保持一致的就不再重复）</p>
+<ul>
+<li><code>int find(int node)</code>：返回根结点数组的对应值，同时将该棵树内的所有结点都指向根节点。（当然我们首先要知道根节点才能指向，所以要用两个独立的循环，一个找根节点，找完后再重新循环一遍，更改根结点。从时间复杂度的角度上分析，只是乘了个两倍的系数，整体不影响。）</li>
+</ul>
+<p>实现代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/*为了减少内容，这边只把与方案二有区别的部分放上来*/</span>
+
+<span class="cm">/* Use the path-compressed-weighted-quick-union method */</span>
+<span class="k">class</span> <span class="nc">WeightedCompressedQuickUnionUF</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+	<span class="cm">/* Return the identification(root) of the specific node */</span>
+    <span class="kt">int</span> <span class="n">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">)</span>  
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">root</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="c1">// To find the root, which parent is itself.
+</span><span class="c1"></span>        <span class="k">while</span> <span class="p">(</span><span class="n">_parent</span><span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">!=</span> <span class="n">root</span><span class="p">)</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">_parent</span><span class="p">[</span><span class="n">root</span><span class="p">];</span>
+        <span class="c1">// Let all its children link directly to the root.
+</span><span class="c1"></span>        <span class="k">while</span> <span class="p">(</span><span class="n">_parent</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">!=</span> <span class="n">node</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_parent</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">_parent</span><span class="p">[</span><span class="n">node</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>这样我们就实现了一个简单的路径压缩~这个算法的时间复杂度的均摊开销为$O(1)$，成功实现常数级别的查找与连接了。</p>
+<p>这就是我们一步步细化算法的过程了。</p>
+<h2 id="课程作业">课程作业</h2>
+<p>本周的课程作业内容为<a href="https://coursera.cs.princeton.edu/algs4/assignments/percolation/specification.php">Percolation</a>。通俗理解就是判断顶部的水能否一层层过滤渗透到最底下一层。我们使用网格来表示，每个格子都有打开或者关闭两种选项。我们设每个格子被打开的概率为$p$，我们想知道，当$p$恰好为何值时，刚好处于渗透状态。</p>
+<p>当然具体内容描述还是得看上方网站介绍。</p>
+<p>代码具体内容就是根据他提供的UF类，解决这个具体问题。</p>
+<p>关键有两点：</p>
+<ol>
+<li>为了方便判断顶部到底部是否流通，我们可以构造两个虚拟的点，分别连接顶部一层的结点和底部一层的结点，这样我们只要判断这两个点是否连通即可。</li>
+<li>当我们将一个结点打开时，要考虑将其与四周（上下左右）方位的已打开结点相连。</li>
+</ol>
+<p>代码就不贴了，具体可以看Github仓库里的。</p>
+<h1 id="后记">后记</h1>
+<p>学习参考内容：</p>
+<p><a href="https://www.coursera.org/learn/algorithms-part1">Algorithms, Part1 - Coursera</a></p>
+<p><a href="https://book.douban.com/subject/19952400/">《算法 第四版》</a></p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Tilemap里瓦块的动态添加与删除|Unity2D学习日记（三）</title>
