@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 17 May 2022 18:21:17 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 May 2022 19:57:21 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用vscode编译C&#43;&#43;多文件(包含模板类)|解决Undefined reference to报错</title>
+      <link>https://www.ironhao.top/posts/undefined_reference_to_in_cplusplus/</link>
+      <pubDate>Thu, 26 May 2022 19:57:21 +0800</pubDate>
+      
+      <guid>https://www.ironhao.top/posts/undefined_reference_to_in_cplusplus/</guid>
+      <description>遇到的问题 今天复现“Algorithms, Part1“课程里“Bags, Queues, And Stacks”里的内容时，想打算顺手重新熟悉了解下C++的一些特</description>
+    </item>
+    
     <item>
       <title>Union-Find问题的解决与方案迭代|Algorithms, Part1|第一周</title>
       <link>https://www.ironhao.top/posts/union_find/</link>
@@ -87,15 +96,6 @@
       
       <guid>https://www.ironhao.top/posts/d-heap/</guid>
       <description>这几周在痛苦的学习数据结构，老师给我们布置了一个构造D-Heap的作业，断断续续debug了两天，总算是实现了。这里就记录一下我的思路与过程</description>
-    </item>
-    
-    <item>
-      <title>约瑟夫环的两种设计——结构化设计与OOP | 学习记录</title>
-      <link>https://www.ironhao.top/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</link>
-      <pubDate>Sun, 14 Mar 2021 20:42:34 +0800</pubDate>
-      
-      <guid>https://www.ironhao.top/posts/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%AE%BE%E8%AE%A1/</guid>
-      <description>周末赶了一个关于程序设计的作业，题目让我们分别用结构化设计与基于面向对象的设计思路来完成约瑟夫环的问题，刚好顺便复习下链表，以下是一点过程记</description>
     </item>
     
   </channel>

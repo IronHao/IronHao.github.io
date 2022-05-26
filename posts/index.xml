@@ -6,8 +6,147 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-cn</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Tue, 17 May 2022 18:21:17 +0800</lastBuildDate>
+		<lastBuildDate>Thu, 26 May 2022 19:57:21 +0800</lastBuildDate>
 		<atom:link href="https://www.ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>使用vscode编译C&#43;&#43;多文件(包含模板类)|解决Undefined reference to报错</title>
+			<link>https://www.ironhao.top/posts/undefined_reference_to_in_cplusplus/</link>
+			<pubDate>Thu, 26 May 2022 19:57:21 +0800</pubDate>
+			
+			<guid>https://www.ironhao.top/posts/undefined_reference_to_in_cplusplus/</guid>
+			<description>遇到的问题 今天复现“Algorithms, Part1“课程里“Bags, Queues, And Stacks”里的内容时，想打算顺手重新熟悉了解下C++的一些特</description>
+			<content type="html"><![CDATA[<h1 id="遇到的问题">遇到的问题</h1>
+<p>今天复现“Algorithms, Part1“课程里“Bags, Queues, And Stacks”里的内容时，想打算顺手重新熟悉了解下C++的一些特性，其中就包括模板类（template）[想要使用它来实现泛型的效果]和头文件（.h）与源文件（.cpp）分离。</p>
+<p>我在头文件中定义类，同时使用模板类方便支持多种数据类型，并在源文件中将方法补充完整。大致代码如下所示：（默认命名空间声明最好不要放在头文件，错误示范&hellip;）</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* Bag.h */</span>
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;Node.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;Node.cpp&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="cm">/* 
+</span><span class="cm"> * Bag data structure, no specific store way, here we use linked-list to store the data.
+</span><span class="cm"> * It has only add() method, no remove() method.
+</span><span class="cm"> * The element in bag has no specific order.
+</span><span class="cm"> */</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">Bag</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">_head</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_size</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Bag</span><span class="p">();</span>
+    <span class="o">~</span><span class="n">Bag</span><span class="p">();</span>
+
+    <span class="cm">/* Insert in the head, no need to traverse, time complexity: O(1) */</span> 
+    <span class="kt">void</span> <span class="nf">add</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">);</span>
+
+    <span class="cm">/* Return whether the bag is empty or not */</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">();</span>
+
+    <span class="cm">/* Return the number of elements in bag */</span>
+    <span class="kt">int</span> <span class="nf">size</span><span class="p">();</span>
+
+    <span class="cm">/* Store the value in array and return */</span>
+    <span class="n">T</span><span class="o">*</span> <span class="nf">elements</span><span class="p">();</span>
+<span class="p">};</span>
+
+
+<span class="cm">/* Bag.cpp */</span>
+<span class="cp">#include</span> <span class="cpf">&#34;Bag.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">Bag</span><span class="p">()</span> 
+<span class="p">{</span>
+    <span class="n">_head</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::~</span><span class="n">Bag</span><span class="p">()</span> <span class="p">{}</span>
+
+<span class="cm">/* Insert in the head, no need to traverse, time complexity: O(1) */</span> 
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">add</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">n</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+    <span class="n">n</span><span class="o">-&gt;</span><span class="n">setNext</span><span class="p">(</span><span class="n">_head</span><span class="p">);</span>
+    <span class="n">_head</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">_size</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Return whether the bag is empty or not */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Return the number of elements in bag */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">size</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_size</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Store the value in array and return */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span><span class="o">*</span> <span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">elements</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">_size</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">_head</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ans</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">getVal</span><span class="p">();</span> 
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">getNext</span><span class="p">();</span>
+        <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div><p>但是当代码敲完，准备运行测试时，却发现出现<code>undefined reference to</code>的报错提示，告诉我找不到对应的方法。</p>
+<p><img src="https://s2.loli.net/2022/05/26/s3xbtIKWy9Vp61q.png" alt=""></p>
+<h1 id="解决思路">解决思路</h1>
+<p>于是我就开动我的小脑筋（<del>指把报错提示复制粘贴到搜索引擎里</del>），开始寻找解决方案。</p>
+<h2 id="c多文件编译配置">C++多文件编译配置</h2>
+<p>首先可能是我们没有编译全部的<code>.cpp</code>文件，只编译了当前执行的<code>main.cpp</code>文件，导致找不到对应的类。</p>
+<p>这个解决方法也很简单，我使用的是<code>vscode</code>，只要修改对应的配置文件，即可。我使用的是<code>Code-runner</code> 插件，打开设置，找到他的<code>Executor Map</code>设置，并点击<code>在settings.json中编辑</code>。</p>
+<p><img src="https://s2.loli.net/2022/05/26/mAPcWltb1usEVj4.png" alt=""></p>
+<p>修改<code>&quot;cpp&quot;</code>栏的<code>$fileName</code>为<code>*.cpp</code>（表示当前目录下所有<code>.cpp</code>文件）即可。</p>
+<p><img src="https://s2.loli.net/2022/05/26/9SC6lgAwOVHBULP.png" alt=""></p>
+<blockquote>
+<p>如果使用配置文件的话，修改<code>tasks.json</code>文件中<code>args</code>栏的<code>${file}</code>为<code>${fileDirname}\\*.cpp</code>也能达到类似的效果。</p>
+</blockquote>
+<p>但是到此，问题还没有得到解决。</p>
+<h2 id="模板的缺陷">模板的缺陷</h2>
+<blockquote>
+<p>The problem is that a function template is not a function. It&rsquo;s a template for creating functions as needed.</p>
+<p>So for a template to work, the compiler intuitively needs two pieces of information: The template itself, and the type that should be substituted into it.</p>
+<p>When you declare the function template without defining it, you&rsquo;re only telling the compiler that such a template exists, but not what it looks like. That&rsquo;s not enough for the compiler to be able to instantiate it, it has to be able to see the full definition as well. The usual solution is to put the entire template in a header that can be included where needed.</p>
+</blockquote>
+<p><code>template</code>意味着在模板被真正使用之前，编译器并不知道模板套用的是什么类型，应该分配多少空间。而我们指定的类型<code>T</code>在编译之前就相当于是个占位符。而不同的类型对应着不同的类，我们需要让编译器在编译的时候就知道并具体的定义它们，而不只给一个抽象的类型<code>T</code>。</p>
+<p>我的程序在编译的时候，编译器只知道类型<code>T</code>版本的<code>Bag</code>类，而不知道<code>int</code>版本的<code>Bag</code>类。所以我们要修改代码，让编译器知道我们需要类型版本的<code>Bag</code>类。</p>
+<p>而我们只导入了<code>.h</code>文件，<code>.h</code>相当于是一种声明，它方便编译器来找到对应的实现。我们没有真正的定义，编译器无法编译，自然就会出现<code>Undefined reference to</code>报错了。</p>
+<p>我们有两种思路去解决：</p>
+<ul>
+<li>
+<p>将<code>.cpp</code>文件也导入<code>main.cpp</code>中（或者将对应的方法放到<code>.h</code>文件里也是一样的）。这样会让编译器明确模板类的定义。</p>
+</li>
+<li>
+<p>或者显式申明用到的类型，例如直接写出</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">Bag</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">Bag</span><span class="p">()</span> 
+<span class="p">{</span>
+    <span class="n">_head</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    
+<span class="p">}</span>
+</code></pre></div><p>但是这样，好像就丧失了泛型的意义所在？</p>
+</li>
+</ul>
+<p>但无论如何，问题得到了解决，这就足够了~</p>
+<h1 id="参考链接">参考链接</h1>
+<p><a href="https://blog.csdn.net/qq_41652566/article/details/124029456?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-0-124029456-blog-117439217.pc_relevant_default&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">C/C++ VScode 多文件编译配置(undefined reference to ‘xxx‘错误) - CSDN</a></p>
+<p><a href="https://stackoverflow.com/questions/648900/c-templates-undefined-reference">C++ templates, undefined reference - stackoverflow</a></p>
+<p>[<a href="https://www.dazhuanlan.com/topics/node2">后端</a> C++: 模板类编译过程中出现“undefined reference to”问题](<a href="https://www.dazhuanlan.com/ooxx52douban/topics/1547428">https://www.dazhuanlan.com/ooxx52douban/topics/1547428</a>)</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Union-Find问题的解决与方案迭代|Algorithms, Part1|第一周</title>
