@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>数据结构|Data structure on IronHao</title>
-    <link>https://www.ironhao.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84data-structure/</link>
+    <link>https://ironhao-github-io.pages.dev/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84data-structure/</link>
     <description>Recent content in 数据结构|Data structure on IronHao</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 23 Mar 2021 18:33:32 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84data-structure/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 23 Mar 2021 18:33:32 +0800</lastBuildDate><atom:link href="https://ironhao-github-io.pages.dev/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84data-structure/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>通过Single/Double Rotation来确保AVL Tree的成立|学习记录</title>
-      <link>https://www.ironhao.top/posts/avl%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC/</link>
+      <link>https://ironhao-github-io.pages.dev/posts/avl%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC/</link>
       <pubDate>Tue, 23 Mar 2021 18:33:32 +0800</pubDate>
       
-      <guid>https://www.ironhao.top/posts/avl%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC/</guid>
+      <guid>https://ironhao-github-io.pages.dev/posts/avl%E6%A0%91%E7%9A%84%E6%97%8B%E8%BD%AC/</guid>
       <description>AVL树拥有O(logN)的查找和删除速度，这也是我们创建这种数据结构的原因，但是，一次删除或者添加操作就可能破坏其脆弱的结构，因此我们需要</description>
     </item>
     
     <item>
       <title>构造D-Heap并理解其插入删除算法|学习记录</title>
-      <link>https://www.ironhao.top/posts/d-heap/</link>
+      <link>https://ironhao-github-io.pages.dev/posts/d-heap/</link>
       <pubDate>Fri, 19 Mar 2021 17:14:50 +0800</pubDate>
       
-      <guid>https://www.ironhao.top/posts/d-heap/</guid>
+      <guid>https://ironhao-github-io.pages.dev/posts/d-heap/</guid>
       <description>这几周在痛苦的学习数据结构，老师给我们布置了一个构造D-Heap的作业，断断续续debug了两天，总算是实现了。这里就记录一下我的思路与过程</description>
     </item>
     
