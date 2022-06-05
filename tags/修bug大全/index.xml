@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>修BUG大全 on IronHao</title>
-    <link>https://ironhao-github-io.pages.dev/tags/%E4%BF%AEbug%E5%A4%A7%E5%85%A8/</link>
+    <link>https://www.ironhao.top/tags/%E4%BF%AEbug%E5%A4%A7%E5%85%A8/</link>
     <description>Recent content in 修BUG大全 on IronHao</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 26 May 2022 19:57:21 +0800</lastBuildDate><atom:link href="https://ironhao-github-io.pages.dev/tags/%E4%BF%AEbug%E5%A4%A7%E5%85%A8/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 May 2022 19:57:21 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/tags/%E4%BF%AEbug%E5%A4%A7%E5%85%A8/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用vscode编译C&#43;&#43;多文件(包含模板类)|解决Undefined reference to报错</title>
-      <link>https://ironhao-github-io.pages.dev/posts/undefined_reference_to_in_cplusplus/</link>
+      <link>https://www.ironhao.top/posts/undefined_reference_to_in_cplusplus/</link>
       <pubDate>Thu, 26 May 2022 19:57:21 +0800</pubDate>
       
-      <guid>https://ironhao-github-io.pages.dev/posts/undefined_reference_to_in_cplusplus/</guid>
+      <guid>https://www.ironhao.top/posts/undefined_reference_to_in_cplusplus/</guid>
       <description>遇到的问题 今天复现“Algorithms, Part1“课程里“Bags, Queues, And Stacks”里的内容时，想打算顺手重新熟悉了解下C++的一些特</description>
     </item>
     
