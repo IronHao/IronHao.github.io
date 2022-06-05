@@ -6,8 +6,898 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-cn</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Thu, 26 May 2022 19:57:21 +0800</lastBuildDate>
+		<lastBuildDate>Thu, 02 Jun 2022 21:32:25 +0800</lastBuildDate>
 		<atom:link href="https://www.ironhao.top/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Bag, Stack and Queue的构造与运用|Algorithms, Part1|第二周</title>
+			<link>https://www.ironhao.top/posts/bag_stack_and_queue/</link>
+			<pubDate>Thu, 02 Jun 2022 21:32:25 +0800</pubDate>
+			
+			<guid>https://www.ironhao.top/posts/bag_stack_and_queue/</guid>
+			<description>引言 记录一下刷Coursera上《Algorithms, Part1》课程的所学内容。主要包括复现一些课上经典的数据结构与算法（C++），以及</description>
+			<content type="html"><![CDATA[<h1 id="引言">引言</h1>
+<p>记录一下刷Coursera上《Algorithms, Part1》课程的所学内容。主要包括复现一些课上经典的数据结构与算法（C++），以及每周课程作业的部分（Java）。如有错误之处，欢迎纠正。</p>
+<p>对应的Github链接：<a href="https://github.com/IronHao/MyAlgorithmBook">IronHao/MyAlgorithmBook (github.com)</a></p>
+<h1 id="正文">正文</h1>
+<p>本周内容比较多，分两篇来总结。这是第一部分，主要包含<code>Bag</code>, <code>Stack</code> and <code>Queue</code>的内容。</p>
+<h2 id="课程内容">课程内容</h2>
+<p><code>Bag</code>, <code>Stack</code> and <code>Queue</code>是最基础的三个数据结构，我们后续更复杂的算法和数据结构都基于这几个数据结构。</p>
+<p>在具体学习了解各个数据结构之前，书本上给我们指明了数据结构的三个最优设计目标：</p>
+<ol>
+<li>它可以处理任意类型的数据；</li>
+<li>所需的空间总是和集合的大小成正比；</li>
+<li>操作所需的时间总是和集合的大小无关。</li>
+</ol>
+<p>这次在代码实现上，我使用模板类（template）来实现泛型的效果[为了实现目标1]。同时为了代码的整洁，我将头文件（.h）与源文件（.cpp）分离。</p>
+<blockquote>
+<p>这中间还遇到了一些小问题，具体可以<a href="https://www.ironhao.top/posts/undefined_reference_to_in_cplusplus/">查看这边</a>。</p>
+<p>另外因为我使用偷懒的办法（再导入<code>.cpp</code>文件）去解决这个问题，为了防止重复编译，要在每个文件开头写上<code>#pragma once</code>保证只执行一次编译。</p>
+</blockquote>
+<p>另外，为了简化内容，我并没有对一些极端情况进行异常处理，如栈为空时尝试从栈顶弹出元素，正常应该抛出一个栈为空的异常报错，然而我选择默认弹出一个<code>T()</code>的返回值。</p>
+<p>接下来让我们逐个看一看。</p>
+<h3 id="node">Node</h3>
+<p>因为在这里我会分别使用**链式存储（链表）<strong>和</strong>顺序存储（数组）*<em>两种方法去实现这几个数据结构</em>（Bag仅用链表，因为数组实现感觉也没什么特别的）*。所以我们需要先实现一下链表中的这个结点类<code>Node</code>。</p>
+<blockquote>
+<p>顺带总结下链表和数组各自的优劣：（来自书本）</p>
+<table>
+<thead>
+<tr>
+<th>数据结构</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数组</td>
+<td>通过索引可以直接访问任意元素</td>
+<td>在初始化时就需要知道元素的数量</td>
+</tr>
+<tr>
+<td>链表</td>
+<td>使用的空间大小和元素数量成正比</td>
+<td>需要通过引用访问任意元素（存引用需要增加内存开销）</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>这个数据结构应该包含两个基本的变量：</p>
+<ul>
+<li><code>T _val</code>：一个T类型的值。</li>
+<li><code>Node&lt;T&gt;* _next</code>：一个指向下一个结点的指针，没有则设为<code>nullptr</code>（空）。</li>
+</ul>
+<p>大致如图所示：</p>
+<p><img src="https://s2.loli.net/2022/06/05/IwnBWM5jeaX1CPF.png" alt=""></p>
+<p>实现代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* Node.h */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="cm">/* The one node in Linked-list */</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">Node</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">T</span> <span class="n">_val</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">_next</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Node</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">);</span>
+    <span class="n">Node</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">,</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">next</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">Node</span><span class="p">();</span>
+
+    <span class="cm">/* Get methods */</span>
+    <span class="n">T</span> <span class="nf">getVal</span><span class="p">();</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="nf">getNext</span><span class="p">();</span>
+    
+    <span class="cm">/* Set methods */</span>
+    <span class="kt">void</span> <span class="nf">setVal</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">setNext</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">next</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* Node.cpp */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;Node.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">Node</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">setVal</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+    <span class="n">setNext</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">Node</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">,</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">next</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">setVal</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+    <span class="n">setNext</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::~</span><span class="n">Node</span><span class="p">()</span> <span class="p">{};</span>
+
+<span class="cm">/* Get methods */</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">getVal</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_val</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">getNext</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_next</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Set methods */</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">setVal</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span> <span class="n">_val</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span> <span class="p">}</span>
+    
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">setNext</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">next</span><span class="p">)</span> <span class="p">{</span> <span class="n">_next</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div><h3 id="bag">Bag</h3>
+<p>背包（Bag）是一种<strong>不支持从中删除元素</strong>的集合数据类型，同时，背包里的元素也<strong>不存在确定的拿取（访问）顺序</strong>。</p>
+<p>它的目的就是帮助用例收集元素并迭代遍历所有收集到的元素，且这些元素的处理顺序应该是不重要的。</p>
+<p>这个数据结构应该包含以下的几个基本方法：</p>
+<ul>
+<li><code>void add(T val)</code>：将一个元素添加到包中。</li>
+<li><code>bool isEmpty()</code>：判断包是否为空。</li>
+<li><code>int size()</code>：返回背包中的元素数量。</li>
+<li><code>T* elements()</code>：返回一个装有背包中所有元素的数组。</li>
+</ul>
+<p>因为背包并没有明确它的访问顺序，在<code>add()</code>中的添加位置也可以任意。考虑到我这边是使用链表来实现，所以我会在链表头部插入新节点，这样每次添加的时间复杂度为常数$O(1)$，减少开销。<code>elements()</code>的话，我选择按照链表的顺序从头逐个读取并存入数组。</p>
+<p>实现代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* Bag.h */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;Node.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;Node.cpp&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="cm">/* 
+</span><span class="cm"> * Bag data structure, no specific store way, here we use linked-list to store the data.
+</span><span class="cm"> * It has only add() method, no remove() method.
+</span><span class="cm"> * The element in bag has no specific order.
+</span><span class="cm"> */</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">Bag</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">_head</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_size</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Bag</span><span class="p">();</span>
+    <span class="o">~</span><span class="n">Bag</span><span class="p">();</span>
+
+    <span class="cm">/* Insert in the head, no need to traverse, time complexity: O(1) */</span> 
+    <span class="kt">void</span> <span class="nf">add</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">);</span>
+
+    <span class="cm">/* Return whether the bag is empty or not */</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">();</span>
+
+    <span class="cm">/* Return the number of elements in bag */</span>
+    <span class="kt">int</span> <span class="nf">size</span><span class="p">();</span>
+
+    <span class="cm">/* Store the value in array and return */</span>
+    <span class="n">T</span><span class="o">*</span> <span class="nf">elements</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* Bag.cpp */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;Bag.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">Bag</span><span class="p">()</span> 
+<span class="p">{</span>
+    <span class="n">_head</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::~</span><span class="n">Bag</span><span class="p">()</span> <span class="p">{}</span>
+
+<span class="cm">/* Insert in the head, no need to traverse, time complexity: O(1) */</span> 
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">add</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">n</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+    <span class="n">n</span><span class="o">-&gt;</span><span class="n">setNext</span><span class="p">(</span><span class="n">_head</span><span class="p">);</span>
+    <span class="n">_head</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">_size</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Return whether the bag is empty or not */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Return the number of elements in bag */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">size</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_size</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Store the value in array and return */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span><span class="o">*</span> <span class="n">Bag</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">elements</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">_size</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">_head</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ans</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">getVal</span><span class="p">();</span> 
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">getNext</span><span class="p">();</span>
+        <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div><h3 id="stack">Stack</h3>
+<p>栈（Stack），或者叫做下压栈，是一种<strong>基于后进先出（LIFO, Last In Frist Out）策略</strong>的集合类型。</p>
+<p>生活中电子邮箱的默认排序（最新的在最上面），以及浏览器的回退按钮等，都基于栈这种后进先出的策略实现。</p>
+<p>它默认最新的（刚放到栈顶的）拥有最高的优先级。</p>
+<p><img src="https://s2.loli.net/2022/06/05/TX2sJCSGdAqkxBE.png" alt=""></p>
+<p>这个数据结构应该包含以下的几个基本方法：</p>
+<ul>
+<li><code>void push(T item)</code>：将一个元素添加到栈顶。</li>
+<li><code>T pop()</code>：弹出（返回并删除）栈顶的元素。</li>
+<li><code>T top()</code>：返回栈顶的元素，不删除。</li>
+<li><code>bool isEmpty()</code>：查看栈是否为空，为空返回<code>true</code>，否则返回<code>false</code>。</li>
+<li><code>int count()</code>：返回栈内的元素个数。</li>
+</ul>
+<p>栈这边的话既可以使用链式存储，也可以使用顺序存储。对于这两种，分别有一些细节需要考虑：</p>
+<ul>
+<li>
+<p>对于<u>链式存储</u>，我们只需要维护一个指向栈顶元素的指针和元素总数的<code>Int</code>型变量即可。元素总数没啥好说，<code>push</code>+1，<code>pop</code>-1即可。栈顶指针的话，我们将其认为为链表头部，每次我们都在头部添加一个新的，删除则是将指针指向下一个然后删除原先的头指针即可。</p>
+</li>
+<li>
+<p>对于<u>顺序存储</u>，我们只需要维护元素总数的<code>Int</code>型变量即可，数组内非空的最后一个元素就是我们的栈顶。关键就在于<strong>数组大小的动态更改</strong>，因为数组本身大小在分配内存时就限定死了，要想改变大小，只能重新分配一个新的数组，并将原先的值逐个复制过去，这是一个比较大的开销，因为需要遍历整个数组（时间复杂度$O(n)$）。我们这里采取的策略是：</p>
+<ul>
+<li>当数组满了，我们将数组容量翻倍（即$*2$)，并将原来的数据转移到新数组中；</li>
+<li>当数组内元素数量减到数组容量的$\frac{1}{4}$时，我们将数组容量减半（即$\frac{1}{2}$）。</li>
+</ul>
+<p>这是一种比较高效的做法，具体证明就不展开了。</p>
+</li>
+</ul>
+<p>实现代码如下：（<code>ArrayStack</code>表示使用顺序存储，<code>LinkedListStack</code>表示使用链式存储）</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* ArrayStack.h */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cm">/* 
+</span><span class="cm"> * Stack data structure, array implementation. FILO.
+</span><span class="cm"> */</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">ArrayStack</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">_arr</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_size</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_count</span><span class="p">;</span>
+
+    <span class="cm">/* Return whether the stack is full or not */</span>
+    <span class="kt">bool</span> <span class="nf">isFull</span><span class="p">();</span>
+    <span class="cm">/* Resize the stack to the &#39;newSize&#39; */</span>
+    <span class="kt">void</span> <span class="nf">resize</span><span class="p">(</span><span class="kt">int</span> <span class="n">newSize</span><span class="p">);</span>
+
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">ArrayStack</span><span class="p">();</span>
+    <span class="o">~</span><span class="n">ArrayStack</span><span class="p">();</span>
+
+    <span class="cm">/* Push the &#39;item&#39; to the top of the stack */</span>
+    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="n">T</span> <span class="n">item</span><span class="p">);</span>
+    <span class="cm">/* Pop(delete) and return the item in the top of the stack */</span>
+    <span class="n">T</span> <span class="nf">pop</span><span class="p">();</span>
+    <span class="cm">/* Get the item in the top of the stack, no delete */</span>
+    <span class="n">T</span> <span class="nf">top</span><span class="p">();</span>
+    <span class="cm">/* Return whether the stack is empty or not */</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">();</span>
+    <span class="cm">/* Return the size (allocate memory) of the stack */</span>
+    <span class="kt">int</span> <span class="nf">size</span><span class="p">();</span>
+    <span class="cm">/* Return the number of items in the stack */</span>
+    <span class="kt">int</span> <span class="nf">count</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* ArrayStack.cpp */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;ArrayStack.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">ArrayStack</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">_arr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">_size</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::~</span><span class="n">ArrayStack</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">_arr</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Return whether the stack is full or not */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">isFull</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_size</span> <span class="o">==</span> <span class="n">_count</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Resize the stack to the &#39;newSize&#39; */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">resize</span><span class="p">(</span><span class="kt">int</span> <span class="n">newSize</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">tempArr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">newSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">tempArr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">_arr</span><span class="p">;</span>
+    <span class="n">_arr</span> <span class="o">=</span> <span class="n">tempArr</span><span class="p">;</span>
+    <span class="n">_size</span> <span class="o">=</span> <span class="n">newSize</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Push the &#39;item&#39; to the top of the stack */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">push</span><span class="p">(</span><span class="n">T</span> <span class="n">item</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Resize the array(Double the size of array) if the stack is full
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">isFull</span><span class="p">())</span>
+        <span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span>
+    <span class="c1">// Push the item
+</span><span class="c1"></span>    <span class="n">_arr</span><span class="p">[</span><span class="n">_count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Pop(delete) and return the item in the top of the stack. Return nullptr if the stack is empty */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">pop</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Pop the item
+</span><span class="c1"></span>    <span class="n">T</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">T</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">_arr</span><span class="p">[</span><span class="o">--</span><span class="n">_count</span><span class="p">];</span>
+    <span class="c1">// Resize the array(halve the size) if the count is one-quarter full
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="n">size</span><span class="p">()</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Get the item in the top of the stack, no delete. Return nullptr if the stack is empty */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">top</span><span class="p">()</span> 
+<span class="p">{</span>
+    <span class="n">T</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">T</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">_arr</span><span class="p">[</span><span class="n">_count</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span> 
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span> 
+<span class="p">}</span>
+
+<span class="cm">/* Return whether the stack is empty or not */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Return the size (allocate memory) of the stack */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">size</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_size</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Return the number of items in the stack */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">count</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_count</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* LinkedListStack.h */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;Node.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;Node.cpp&#34;</span><span class="cp">
+</span><span class="cp"></span>
+
+<span class="cm">/* 
+</span><span class="cm"> * Stack data structure, linked-list implementation. FILO.
+</span><span class="cm"> */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">LinkedListStack</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="cm">/* data */</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">_top</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_count</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">LinkedListStack</span><span class="p">();</span>
+    <span class="o">~</span><span class="n">LinkedListStack</span><span class="p">();</span>
+
+    <span class="cm">/* Push the &#39;item&#39; to the top of the stack */</span>
+    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="n">T</span> <span class="n">item</span><span class="p">);</span>
+    <span class="cm">/* Pop(delete) and return the item in the top of the stack */</span>
+    <span class="n">T</span> <span class="nf">pop</span><span class="p">();</span>
+    <span class="cm">/* Get the item in the top of the stack, no delete */</span>
+    <span class="n">T</span> <span class="nf">top</span><span class="p">();</span>
+    <span class="cm">/* Return whether the stack is empty or not */</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">();</span>
+    <span class="cm">/* Return the number of items in the stack */</span>
+    <span class="kt">int</span> <span class="nf">count</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* LinkedListStack.cpp */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;LinkedListStack.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">LinkedListStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">LinkedListStack</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">_top</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">LinkedListStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::~</span><span class="n">LinkedListStack</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">delete</span> <span class="n">_top</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Push the &#39;item&#39; to the top of the stack */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">LinkedListStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">push</span><span class="p">(</span><span class="n">T</span> <span class="n">item</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">temp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+    <span class="n">temp</span><span class="o">-&gt;</span><span class="n">setNext</span><span class="p">(</span><span class="n">_top</span><span class="p">);</span>
+    <span class="n">_top</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="n">_count</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Pop(delete) and return the item in the top of the stack */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">LinkedListStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">pop</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">T</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">_top</span><span class="o">-&gt;</span><span class="n">getVal</span><span class="p">();</span>
+        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">_top</span><span class="p">;</span>
+        <span class="n">_top</span> <span class="o">=</span> <span class="n">_top</span><span class="o">-&gt;</span><span class="n">getNext</span><span class="p">();</span>
+        <span class="k">delete</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">_count</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">T</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Get the item in the top of the stack, no delete */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">LinkedListStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">top</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">T</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">_top</span><span class="o">-&gt;</span><span class="n">getVal</span><span class="p">();</span>
+    <span class="k">else</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">T</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Return whether the stack is empty or not */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">LinkedListStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Return the number of items in the stack */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">LinkedListStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">count</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_count</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div><h3 id="queue">Queue</h3>
+<p>队列（Queue），或者叫做先进先出队列，是一种基于先进先出（FIFO, First In First Out）策略的集合类型。</p>
+<p>它就像我们生活中排队一样，遵从先来后到的原则，认为最早来的拥有最高的优先级。</p>
+<p>通过使用队列，我们可以在保存元素的同时保存它们的相对顺序，即让它们的入列顺序与出列顺序保持一致（栈则刚好相反，为逆序）。</p>
+<p><img src="https://s2.loli.net/2022/06/05/4tFNep1XKqU2Jag.png" alt=""></p>
+<p>这个数据结构应该包含以下的几个基本方法：</p>
+<ul>
+<li><code>void enqueue(T item)</code>：将一个元素添加到队尾。</li>
+<li><code>T dequeue()</code>：弹出（返回并删除）队头的元素。</li>
+<li><code>T first()</code>：返回队头的元素，不删除。</li>
+<li><code>T last()</code>：返回队尾的元素，不删除。</li>
+<li><code>bool isEmpty()</code>：查看队列是否为空，为空返回<code>true</code>，否则返回<code>false</code>。</li>
+<li><code>int count()</code>：返回队列内的元素个数。</li>
+</ul>
+<p>同样，队列这边的话也既可以使用链式存储，也可以使用顺序存储。对于这两种，分别有一些细节需要考虑：</p>
+<ul>
+<li>
+<p>对于<u>链式存储</u>，我们只需要维护两个指针（一个指向队头的元素，一个指向队尾的元素）和元素总数的<code>Int</code>型变量即可。元素总数没啥好说，<code>enqueue</code>+1，<code>dequeue</code>-1即可。指针的话就是简单的在删除和添加操作时更新头和尾指针即可。正常情况下，<code>enqueue</code>只用更新队尾指针，<code>dequeue</code>只用更新队头指针。但要注意为空的边界条件（从一个元素变为零个/从零个变为一个），此时两个指针都需要维护。</p>
+</li>
+<li>
+<p>对于<u>顺序存储</u>，我们有两种选择：</p>
+<ul>
+<li>维护一个指向队头的下标+元素总数的<code>Int</code>型变量，队尾由<code>队头+元素总数-1</code>得出。</li>
+<li>维护一个指向队头的下标+一个指向队尾的下标，元素总数由<code>队尾-队头+1</code>得出。</li>
+</ul>
+<p>在这里我选择第一种。另外，为了充分利用空间，我们将数组理解为一个<strong>环</strong>（即对于大小为$n$的数组$arr$，最后一个数组元素$arr[n-1]$的下一个元素为$arr[0]$)。所以我们这里要用到取余<code>%</code>来实现，具体见代码。</p>
+</li>
+</ul>
+<p>实现代码如下：（<code>ArrayQueue</code>表示使用顺序存储，<code>LinkedListQueue</code>表示使用链式存储）</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* ArrayQueue.h */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cm">/* 
+</span><span class="cm"> * Queue data structure, linked-list implementation. FIFO.
+</span><span class="cm"> */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">ArrayQueue</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">_arr</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_head</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_size</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_count</span><span class="p">;</span>
+
+    <span class="cm">/* Return whether the queue is full or not */</span>
+    <span class="kt">bool</span> <span class="nf">isFull</span><span class="p">();</span>
+    <span class="cm">/* Resize the queue to the &#39;newSize&#39; */</span>
+    <span class="kt">void</span> <span class="nf">resize</span><span class="p">(</span><span class="kt">int</span> <span class="n">newSize</span><span class="p">);</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">ArrayQueue</span><span class="p">();</span>
+    <span class="o">~</span><span class="n">ArrayQueue</span><span class="p">();</span>
+
+    <span class="cm">/* Insert a new item onto queue(tail of the queue) */</span>
+    <span class="kt">void</span> <span class="nf">enqueue</span><span class="p">(</span><span class="n">T</span> <span class="n">item</span><span class="p">);</span>
+    <span class="cm">/* Remove and return the item least recently added(head of the queue) */</span>
+    <span class="n">T</span> <span class="nf">dequeue</span><span class="p">();</span>
+    <span class="cm">/* Return the item least recently added without removing */</span>
+    <span class="n">T</span> <span class="nf">first</span><span class="p">();</span>
+    <span class="cm">/* Return the item latest recently added without removing */</span>
+    <span class="n">T</span> <span class="nf">last</span><span class="p">();</span>
+    <span class="cm">/* Return whether the queue is empty or not */</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">();</span>
+    <span class="cm">/* Return the size (allocate memory) of the queue */</span>
+    <span class="kt">int</span> <span class="nf">size</span><span class="p">();</span>
+    <span class="cm">/* Return the number of items in queue */</span>
+    <span class="kt">int</span> <span class="nf">count</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* ArrayStack.cpp */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;ArrayStack.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">ArrayStack</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">_arr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">_size</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::~</span><span class="n">ArrayStack</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">_arr</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Return whether the stack is full or not */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">isFull</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_size</span> <span class="o">==</span> <span class="n">_count</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Resize the stack to the &#39;newSize&#39; */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">resize</span><span class="p">(</span><span class="kt">int</span> <span class="n">newSize</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">tempArr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">newSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">tempArr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">_arr</span><span class="p">;</span>
+    <span class="n">_arr</span> <span class="o">=</span> <span class="n">tempArr</span><span class="p">;</span>
+    <span class="n">_size</span> <span class="o">=</span> <span class="n">newSize</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Push the &#39;item&#39; to the top of the stack */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">push</span><span class="p">(</span><span class="n">T</span> <span class="n">item</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Resize the array(Double the size of array) if the stack is full
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">isFull</span><span class="p">())</span>
+        <span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span>
+    <span class="c1">// Push the item
+</span><span class="c1"></span>    <span class="n">_arr</span><span class="p">[</span><span class="n">_count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Pop(delete) and return the item in the top of the stack. Return nullptr if the stack is empty */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">pop</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Pop the item
+</span><span class="c1"></span>    <span class="n">T</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">T</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">_arr</span><span class="p">[</span><span class="o">--</span><span class="n">_count</span><span class="p">];</span>
+    <span class="c1">// Resize the array(halve the size) if the count is one-quarter full
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="n">size</span><span class="p">()</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Get the item in the top of the stack, no delete. Return nullptr if the stack is empty */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">top</span><span class="p">()</span> 
+<span class="p">{</span>
+    <span class="n">T</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">T</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">_arr</span><span class="p">[</span><span class="n">_count</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span> 
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span> 
+<span class="p">}</span>
+
+<span class="cm">/* Return whether the stack is empty or not */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Return the size (allocate memory) of the stack */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">size</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_size</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Return the number of items in the stack */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">count</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_count</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* LinkedListQueue.h */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;Node.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;Node.cpp&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cm">/* 
+</span><span class="cm"> * Queue data structure, linked-list implementation. FIFO.
+</span><span class="cm"> */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">LinkedListQueue</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">_first</span><span class="p">;</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">_last</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">_count</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">LinkedListQueue</span><span class="p">();</span>
+    <span class="o">~</span><span class="n">LinkedListQueue</span><span class="p">();</span>
+
+    <span class="cm">/* Insert a new item onto queue(tail of the queue) */</span>
+    <span class="kt">void</span> <span class="nf">enqueue</span><span class="p">(</span><span class="n">T</span> <span class="n">item</span><span class="p">);</span>
+    <span class="cm">/* Remove and return the item least recently added(head of the queue) */</span>
+    <span class="n">T</span> <span class="nf">dequeue</span><span class="p">();</span>
+    <span class="cm">/* Return the item least recently added without removing */</span>
+    <span class="n">T</span> <span class="nf">first</span><span class="p">();</span>
+    <span class="cm">/* Return the item latest recently added without removing */</span>
+    <span class="n">T</span> <span class="nf">last</span><span class="p">();</span>
+    <span class="cm">/* Return whether the queue is empty or not */</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">();</span>
+    <span class="cm">/* Return the number of items in queue */</span>
+    <span class="kt">int</span> <span class="nf">count</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* LinkedListQueue.cpp */</span>
+
+<span class="cp">#pragma once
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;LinkedListQueue.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">LinkedListQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">LinkedListQueue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">_first</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">_last</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">LinkedListQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::~</span><span class="n">LinkedListQueue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">delete</span> <span class="n">_first</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="n">_last</span><span class="p">;</span>
+<span class="p">}</span>
+    
+<span class="cm">/* Insert a new item onto queue(tail of the queue) */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">LinkedListQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">enqueue</span><span class="p">(</span><span class="n">T</span> <span class="n">item</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">temp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="n">_last</span><span class="o">-&gt;</span><span class="n">setNext</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="n">_last</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">_last</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_first</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">_first</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">_count</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+    
+<span class="cm">/* Remove and return the item least recently added(head of the queue) */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">LinkedListQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">dequeue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">T</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">_first</span><span class="o">-&gt;</span><span class="n">getVal</span><span class="p">();</span>
+        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">_first</span><span class="p">;</span>
+        <span class="n">_first</span> <span class="o">=</span> <span class="n">_first</span><span class="o">-&gt;</span><span class="n">getNext</span><span class="p">();</span>
+        <span class="k">delete</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">_count</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">T</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Return the item least recently added without removing */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">LinkedListQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">first</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">T</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">_first</span><span class="o">-&gt;</span><span class="n">getVal</span><span class="p">();</span>
+    <span class="k">else</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">T</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/* Return the item latest recently added without removing */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>    
+<span class="n">T</span> <span class="n">LinkedListQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">last</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">T</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isEmpty</span><span class="p">())</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">_last</span><span class="o">-&gt;</span><span class="n">getVal</span><span class="p">();</span>
+    <span class="k">else</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">T</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Return whether the queue is empty or not */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">LinkedListQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_first</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="cm">/* Return the number of items in queue */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">LinkedListQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">count</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_count</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div><h3 id="应用">应用</h3>
+<p>应用方面，课程中主要重点讲解了Dijkstra的双栈算术表达式求值算法。该算法使用了使用了两个栈，一个存储值，一个存储运算符。它仅对未省略括号的算术表达式有效。且我们为了简化，只考虑二元运算符。它主要要处理下列四种情况：</p>
+<ul>
+<li>对于操作数（值），它将其压入到操作数（值）栈中；</li>
+<li>对于运算符，它将其压入到运算符栈中；</li>
+<li>对于左括号，虽然为运算符，我们将其忽略；</li>
+<li>对于右括号，我们从运算符栈中弹出栈顶运算符，并从值栈中，弹出栈顶两个元素（只考虑二元运算符），并根据弹出的运算符，对两个弹出的值进行相应的计算操作。</li>
+</ul>
+<p>这里有几个细节需要注意：</p>
+<ul>
+<li>因为我们是从左到右扫描，逐个读取处理字符串。所以对于弹出的两个值元素，先弹出的应该是运算符右侧的值（后压入），后弹出的则是运算符左侧的值（先压入）。</li>
+<li>课程中是逐个读取字符串，一个字符串代表一个值/运算符。我改为直接输入整行算数表达式。则需要逐个字符处理，对应的，为了判断输入的值是否完整（比如我输入了98,要判断是98而不是9），我们要往前看一位，若接下来一位仍为数字，则将当前结果×10并继续读下一位，若不是，则表明值已经读取完整，将其压入值栈中。</li>
+</ul>
+<p>具体代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/* ArithmeticExpressionUsingStack.cpp */</span>
+
+<span class="cp">#include</span> <span class="cpf">&#34;ArrayStack.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;ArrayStack.cpp&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+
+<span class="cm">/*
+</span><span class="cm"> *  Dijkstra&#39;s two-stack arithmetic expression evaluation.
+</span><span class="cm"> *  One stack for operator, another stack for value.
+</span><span class="cm"> *  ・Value: push onto the value stack.
+</span><span class="cm"> *  ・Operator: push onto the operator stack.
+</span><span class="cm"> *  ・Left parenthesis: ignore.
+</span><span class="cm"> *  ・Right parenthesis: pop operator and two values; push the result of applying that operator to those values onto the operand stack.
+</span><span class="cm"> *  
+</span><span class="cm"> *  WARNING: Arithmetic expressions that ignore parentheses are not considered! And we only care about binary operator (operator with two values).
+</span><span class="cm"> */</span>
+<span class="kt">int</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">string</span> <span class="n">input</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;*</span> <span class="n">ops</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span> <span class="n">vals</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        
+        <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">input</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="c1">// Ignore the &#39;(&#39; and &#39; &#39;[space].
+</span><span class="c1"></span>            <span class="k">case</span> <span class="sc">&#39;(&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39; &#39;</span><span class="o">:</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="c1">// Pop the operator in &#39;ops&#39; stack and do the operator.
+</span><span class="c1"></span>            <span class="k">case</span> <span class="sc">&#39;)&#39;</span><span class="o">:</span>
+            <span class="p">{</span>
+                <span class="kt">char</span> <span class="n">op</span> <span class="o">=</span> <span class="n">ops</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">();</span>
+                <span class="c1">// if (op == char())
+</span><span class="c1"></span>                <span class="c1">//     throw &#34;Illegal arithmetic expression!&#34;;
+</span><span class="c1"></span>                <span class="kt">int</span> <span class="n">valR</span> <span class="o">=</span> <span class="n">vals</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">();</span> 
+                <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">&#39;+&#39;</span><span class="p">)</span> <span class="n">valR</span> <span class="o">=</span> <span class="n">vals</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">()</span> <span class="o">+</span> <span class="n">valR</span><span class="p">;</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">&#39;-&#39;</span><span class="p">)</span> <span class="n">valR</span> <span class="o">=</span> <span class="n">vals</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">()</span> <span class="o">-</span> <span class="n">valR</span><span class="p">;</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">&#39;*&#39;</span><span class="p">)</span> <span class="n">valR</span> <span class="o">=</span> <span class="n">vals</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">()</span> <span class="o">*</span> <span class="n">valR</span><span class="p">;</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">&#39;/&#39;</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">valR</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">throw</span> <span class="s">&#34;The divisor cannot be zero!&#34;</span><span class="p">;</span>
+                    <span class="n">valR</span> <span class="o">=</span> <span class="n">ops</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">()</span> <span class="o">/</span> <span class="n">valR</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">vals</span><span class="o">-&gt;</span><span class="n">push</span><span class="p">(</span><span class="n">valR</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Arithmetic operator
+</span><span class="c1"></span>            <span class="k">case</span> <span class="sc">&#39;+&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;-&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;*&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;/&#39;</span><span class="o">:</span>
+                <span class="n">ops</span><span class="o">-&gt;</span><span class="n">push</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="c1">// Value 
+</span><span class="c1"></span>            <span class="k">case</span> <span class="sc">&#39;0&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;1&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;2&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;3&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;4&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;5&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;6&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;7&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;8&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;9&#39;</span><span class="o">:</span>
+                <span class="n">num</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">);</span>
+                <span class="c1">// One char of lookahead to deter whether it is a connected number or not. If the value is clear (found the end), push to the &#39;vals&#39; stack.
+</span><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="o">&gt;=</span> <span class="n">input</span><span class="p">.</span><span class="n">length</span><span class="p">()</span> <span class="o">||</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">&#39;9&#39;</span> <span class="o">||</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">vals</span><span class="o">-&gt;</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+                    <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="k">throw</span> <span class="s">&#34;Illegal characters in input!&#34;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">vals</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">throw</span> <span class="s">&#34;Illegal arithmetic expression!&#34;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">catch</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">msg</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">vals</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+</span><span class="cm"> *  A simple test:
+</span><span class="cm"> *  Input the arithmetic expression(one line) and evaluate it, it will print the answer and wait for next input.
+</span><span class="cm"> *  Input &#39;End&#39; to exit.
+</span><span class="cm"> */</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;*</span> <span class="n">ops</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span> <span class="n">vals</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayStack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+
+    <span class="n">string</span> <span class="n">input</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">input</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">input</span> <span class="o">==</span> <span class="s">&#34;End&#34;</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Ans: &#34;</span><span class="o">&lt;&lt;</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="课程作业">课程作业</h2>
+<p>这个课程作业要求我们实现两个特殊的队列形式，<code>deque</code>和<code>randomized queue</code>。[具体可以看这](<a href="https://coursera.cs.princeton.edu/algs4/assignments/queues/specification.php">Programming Assignment 2: Queues (princeton.edu)</a>)。</p>
+<blockquote>
+<p><strong>Dequeue.</strong> A <em>double-ended queue</em> or <em>deque</em> (pronounced “deck”) is a generalization of a stack and a queue that supports adding and removing items from either the front or the back of the data structure.</p>
+</blockquote>
+<p><code>Dequeue</code>实际上就是可以双头添加/删除的队列，比起<code>queue</code>队头删除队尾添加多了些选择。</p>
+<blockquote>
+<p><strong>Randomized queue.</strong> A <em>randomized queue</em> is similar to a stack or queue, except that the item removed is chosen uniformly at random among items in the data structure.</p>
+</blockquote>
+<p><code>Randomized queue</code>的话，把<code>queue</code>队头删除的特性改为了队列中随机删除。增加了随机性。</p>
+<p>代码就不贴了，具体可以看Github仓库里的。</p>
+<h1 id="后记">后记</h1>
+<p>学习参考内容：</p>
+<p><a href="https://www.coursera.org/learn/algorithms-part1">Algorithms, Part1 - Coursera</a></p>
+<p><a href="https://book.douban.com/subject/19952400/">《算法 第四版》</a></p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>使用vscode编译C&#43;&#43;多文件(包含模板类)|解决Undefined reference to报错</title>

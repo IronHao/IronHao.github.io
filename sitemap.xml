@@ -2,16 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://www.ironhao.top/tags/c&#43;&#43;/</loc>
-    <lastmod>2022-05-26T19:57:21+08:00</lastmod>
+    <loc>https://www.ironhao.top/posts/bag_stack_and_queue/</loc>
+    <lastmod>2022-06-02T21:32:25+08:00</lastmod>
   </url><url>
     <loc>https://www.ironhao.top/</loc>
-    <lastmod>2022-05-26T19:57:21+08:00</lastmod>
+    <lastmod>2022-06-02T21:32:25+08:00</lastmod>
   </url><url>
     <loc>https://www.ironhao.top/posts/</loc>
-    <lastmod>2022-05-26T19:57:21+08:00</lastmod>
+    <lastmod>2022-06-02T21:32:25+08:00</lastmod>
   </url><url>
     <loc>https://www.ironhao.top/tags/</loc>
+    <lastmod>2022-06-02T21:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://www.ironhao.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
+    <lastmod>2022-06-02T21:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://www.ironhao.top/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2022-06-02T21:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://www.ironhao.top/tags/c&#43;&#43;/</loc>
     <lastmod>2022-05-26T19:57:21+08:00</lastmod>
   </url><url>
     <loc>https://www.ironhao.top/posts/undefined_reference_to_in_cplusplus/</loc>
@@ -21,9 +30,6 @@
     <lastmod>2022-05-26T19:57:21+08:00</lastmod>
   </url><url>
     <loc>https://www.ironhao.top/posts/union_find/</loc>
-    <lastmod>2022-05-17T18:21:17+08:00</lastmod>
-  </url><url>
-    <loc>https://www.ironhao.top/tags/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2022-05-17T18:21:17+08:00</lastmod>
   </url><url>
     <loc>https://www.ironhao.top/posts/tileaddanddelete/</loc>

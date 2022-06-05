@@ -1,28 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>算法 on IronHao</title>
-    <link>https://www.ironhao.top/tags/%E7%AE%97%E6%B3%95/</link>
-    <description>Recent content in 算法 on IronHao</description>
+    <title>数据结构 on IronHao</title>
+    <link>https://www.ironhao.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
+    <description>Recent content in 数据结构 on IronHao</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 02 Jun 2022 21:32:25 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/tags/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 02 Jun 2022 21:32:25 +0800</lastBuildDate><atom:link href="https://www.ironhao.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Bag, Stack and Queue的构造与运用|Algorithms, Part1|第二周</title>
       <link>https://www.ironhao.top/posts/bag_stack_and_queue/</link>
       <pubDate>Thu, 02 Jun 2022 21:32:25 +0800</pubDate>
       
       <guid>https://www.ironhao.top/posts/bag_stack_and_queue/</guid>
-      <description>引言 记录一下刷Coursera上《Algorithms, Part1》课程的所学内容。主要包括复现一些课上经典的数据结构与算法（C++），以及</description>
-    </item>
-    
-    <item>
-      <title>Union-Find问题的解决与方案迭代|Algorithms, Part1|第一周</title>
-      <link>https://www.ironhao.top/posts/union_find/</link>
-      <pubDate>Tue, 17 May 2022 18:21:17 +0800</pubDate>
-      
-      <guid>https://www.ironhao.top/posts/union_find/</guid>
       <description>引言 记录一下刷Coursera上《Algorithms, Part1》课程的所学内容。主要包括复现一些课上经典的数据结构与算法（C++），以及</description>
     </item>
     
